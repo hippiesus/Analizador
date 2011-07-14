@@ -14,7 +14,7 @@ public class Analizador {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("funciona? :)");
+        System.out.println("funciona? 2.0 :)");
         // TODO code application logic here
     }
 }
