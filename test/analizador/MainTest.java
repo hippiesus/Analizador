@@ -41,7 +41,7 @@ public class MainTest {
     @Test
     public void testMain() {
         System.out.println("main");
-        String[] args = {"/Users/juancarlos/tmp"};
+        String[] args = {"/Users/juancarlos/tmp/"};
         Main.main(args);
     }
 }

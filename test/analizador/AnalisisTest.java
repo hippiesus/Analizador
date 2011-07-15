@@ -4,6 +4,7 @@
  */
 package analizador;
 
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,12 +44,16 @@ public class AnalisisTest {
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
         String ubicacionArchivos = "";
+        boolean exp;
         Analisis instance = new Analisis();
-        int expResult = 0;
-        instance.detectarDefectos(ubicacionArchivos);
+        Map<String,Integer> mapa=instance.detectarDefectos(ubicacionArchivos);
+        if(mapa.size()==2){
+            exp=true;
+        }else{
+            exp=false;
+        }
         
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(exp);
     }
 
     /**
@@ -57,11 +62,12 @@ public class AnalisisTest {
     @Test
     public void testAnalizarNodo() {
         System.out.println("analizarNodo");
-        Nodo nodo = null;
+        Nodo nodo = new Nodo();
+        nodo.setPrograma("/Users/juancarlos/tmp/archivo.sql");
         Analisis instance = new Analisis();
-        instance.analizarNodo(nodo);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Map<String,Integer> mapa=instance.analizarNodo(nodo);
+        assertEquals(1, mapa.size());
+        
     }
 
     /**
@@ -71,7 +77,7 @@ public class AnalisisTest {
     public void testGenerarXML() {
         System.out.println("generarXML");
         String usuario = "";
-        String ubicacionArchivos = "/Users/juancarlos/tmp";
+        String ubicacionArchivos = "/Users/juancarlos/tmp/";
         int cantidadDefectos = 0;
         int cantidadDefectosBajo = 0;
         int cantidadDefectosMedio = 0;
