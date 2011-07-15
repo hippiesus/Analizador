@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 public class Grafo {
 
-    public ArrayList<Nodo> crearGrafo(String[] archivos) {
+    public ArrayList<Nodo> crearGrafo(String ubicacionArchivos,String[] archivos) {
 
         ArrayList<Nodo> lista= new ArrayList<Nodo>();
 
             for (int x = 0; x < archivos.length; x++) {
                 lista.add(new Nodo());
-                lista.get(x).setPrograma(archivos[x]);
+                lista.get(x).setPrograma(ubicacionArchivos+archivos[x]);
             }
        return lista; 
     }

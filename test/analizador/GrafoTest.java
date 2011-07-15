@@ -43,12 +43,11 @@ public class GrafoTest {
     @Test
     public void testCrearGrafo() {
         System.out.println("crearGrafo");
-        String[] archivos = null;
+        String[] archivos = {"archivo.sql", "archivo2.sql"};
+        String ubicacionArchivos="/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
-        ArrayList expResult = null;
-        ArrayList result = instance.crearGrafo(archivos);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ArrayList result = instance.crearGrafo(ubicacionArchivos,archivos);
+        assertEquals(2,result.size());
+                
     }
 }

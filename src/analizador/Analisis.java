@@ -32,46 +32,19 @@ import org.w3c.dom.Text;
  */
 public class Analisis {
 
-    public Map<String,Integer> detectarDefectos(String ubicacionArchivos) {
-        Map<String,Integer> mapa = new HashMap<String,Integer>();
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
+    public Map<String, Integer> detectarDefectos(String ubicacionArchivos) {
+        Map<String, Integer> mapa = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
-
-        archivo = new File(ubicacionArchivos);
-        ArrayList<Nodo> lista = grafo.crearGrafo(archivo.list());
+        File archivo = new File(ubicacionArchivos);
+        ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
         System.out.println(lista.size());
 
         for (int x = 0; x < lista.size(); x++) {
-            try {
-
-                archivo = new File(ubicacionArchivos + "/" + lista.get(x).getPrograma());
-                System.out.println(archivo);
-                fr = new FileReader(archivo);
-                br = new BufferedReader(fr);
-
-                String linea;
-                while ((linea = br.readLine()) != null) {
-                    Pattern p = Pattern.compile("open");
-                    Matcher m = p.matcher(linea);
-                    if (m.find()) {
-                        System.out.println("DEFECTO ENCONTRADO");
-                        System.out.println(linea);
-                    }
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-
-                try {
-                    if (null != fr) {
-                        fr.close();
-                    }
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
+            //valida que solo sean archivos .sql
+            String ext=lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length()-3,lista.get(x).getPrograma().length());
+            System.out.println("Extencion"+ext);                    
+            if(ext.equals("sql")){
+                analizarNodo(lista.get(x));
             }
 
         }
@@ -79,7 +52,45 @@ public class Analisis {
 
     }
 
-    public void analizarNodo(Nodo nodo) {
+    public Map<String, Integer> analizarNodo(Nodo nodo) {
+
+        Map<String, Integer> mapa = new HashMap<String, Integer>();
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+
+            archivo = new File(nodo.getPrograma());
+            System.out.println(archivo);
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                Pattern p = Pattern.compile("open");
+                Matcher m = p.matcher(linea);
+                if (m.find()) {
+                    System.out.println("DEFECTO ENCONTRADO");
+                    System.out.println(linea);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+
+
+        return mapa;
     }
 
     public boolean generarXML(String usuario, String ubicacionArchivos, int cantidadDefectos, int cantidadDefectosBajo, int cantidadDefectosMedio, int cantidadDefectosCritico) {
@@ -89,11 +100,11 @@ public class Analisis {
             DOMImplementation implementation = builder.getDOMImplementation();
             Document document = implementation.createDocument(null, "xml", null);
             Element raiz = document.createElement("UltimaEjecucion");
-            
+
             Element fechaElem = document.createElement("fecha");
             Text textFecha = document.createTextNode(new Date().toString());
 
-            
+
             Element usuarioElem = document.createElement("usuario");
             Text text = document.createTextNode(usuario);
 
@@ -113,7 +124,7 @@ public class Analisis {
             Text textCdc = document.createTextNode(String.valueOf(cantidadDefectosCritico));
 
             document.getDocumentElement().appendChild(raiz);
-            
+
             raiz.appendChild(fechaElem);
             raiz.appendChild(usuarioElem);
             raiz.appendChild(ubicacionElem);
@@ -121,7 +132,7 @@ public class Analisis {
             raiz.appendChild(cantDefBElem);
             raiz.appendChild(cantDefMElem);
             raiz.appendChild(cantDefCElem);
-            
+
             fechaElem.appendChild(textFecha);
             usuarioElem.appendChild(text);
             ubicacionElem.appendChild(textUb);
@@ -129,7 +140,7 @@ public class Analisis {
             cantDefBElem.appendChild(textCdb);
             cantDefMElem.appendChild(textCdc);
             cantDefCElem.appendChild(textCdc);
-           
+
 
 
             document.setXmlVersion("1.0");
