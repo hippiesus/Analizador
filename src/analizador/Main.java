@@ -17,10 +17,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Analisis analisis= new Analisis();
-        
-        System.out.println("Ingrese Ruta Archivos SQL");
-        Scanner sc = new Scanner(System.in);
-        String ubicacionArchivos = sc.next();
+        String ubicacionArchivos = args[0];
         System.out.println("Los archivos se buscaran en:"+ ubicacionArchivos);
         analisis.detectarDefectos(ubicacionArchivos);
         
