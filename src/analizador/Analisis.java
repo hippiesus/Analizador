@@ -24,6 +24,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
@@ -41,9 +43,9 @@ public class Analisis {
 
         for (int x = 0; x < lista.size(); x++) {
             //valida que solo sean archivos .sql
-            String ext=lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length()-3,lista.get(x).getPrograma().length());
-            System.out.println("Extencion"+ext);                    
-            if(ext.equals("sql")){
+            String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
+            System.out.println("Extencion" + ext);
+            if (ext.equals("sql")) {
                 analizarNodo(lista.get(x));
             }
 
@@ -58,6 +60,7 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
+        ArrayList<PatronDefecto> pd = obtenerPatrones();
 
         try {
 
@@ -67,14 +70,17 @@ public class Analisis {
             br = new BufferedReader(fr);
 
             String linea;
+            int critico=0;
             while ((linea = br.readLine()) != null) {
-                Pattern p = Pattern.compile("open");
-                Matcher m = p.matcher(linea);
-                if (m.find()) {
-                    System.out.println("DEFECTO ENCONTRADO");
-                    System.out.println(linea);
+                for (int x = 0; x < pd.size(); x++) {
+                    Pattern p = Pattern.compile(pd.get(x).getNombre());
+                    Matcher m = p.matcher(linea);
+                    if (m.find()) {
+                        mapa.put("critico", critico++);
+                        System.out.println("DEFECTO ENCONTRADO");
+                        System.out.println(linea);
+                    }
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,5 +162,75 @@ public class Analisis {
             return false;
 
         }
+    }
+
+    public ArrayList<PatronDefecto> obtenerPatrones() {
+
+        ArrayList<PatronDefecto> p = new ArrayList<PatronDefecto>();
+        try {
+
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(new File("patrones.xml"));
+
+            doc.getDocumentElement().normalize();
+
+            NodeList listBloqueos = doc.getElementsByTagName("patrones");
+            int totalBloqueos = listBloqueos.getLength();
+            System.out.println("Total de PATRONES : " + totalBloqueos);
+
+            for (int s = 0; s < listBloqueos.getLength(); s++) {
+
+                Node patron = listBloqueos.item(s);
+                if (patron.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element pa = (Element) patron;
+                    PatronDefecto pd = new PatronDefecto();
+                    // -------
+                    NodeList identificador = pa.getElementsByTagName("identificador");
+                    Element identificadorElement = (Element) identificador.item(0);
+
+                    NodeList identificadorList = identificadorElement.getChildNodes();
+                    if (((Node) identificadorList.item(0)) != null) {
+                        pd.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
+                    }
+
+                    // -------
+                    NodeList nombre = pa.getElementsByTagName("nombre");
+                    Element nombreElement = (Element) nombre.item(0);
+
+                    NodeList nombreList = nombreElement.getChildNodes();
+                    if (((Node) nombreList.item(0)) != null) {
+                        pd.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
+
+                    }
+                    // ----
+                    NodeList clasificacion = pa.getElementsByTagName("clasificacion");
+                    Element clasificacionElement = (Element) clasificacion.item(0);
+
+                    NodeList clasificacionList = clasificacionElement.getChildNodes();
+                    if (((Node) clasificacionList.item(0)) != null) {
+                        pd.setClasificacion(((Node) clasificacionList.item(0)).getNodeValue().trim());
+                    }
+
+                    // ----
+                    NodeList descripcion = pa.getElementsByTagName("descripcion");
+                    Element descripcionElement = (Element) descripcion.item(0);
+
+                    NodeList descripcionList = descripcionElement.getChildNodes();
+                    if (((Node) descripcionList.item(0)) != null) {
+                        pd.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
+                    }
+
+                    p.add(pd);
+
+                }
+
+            }
+
+        } catch (Exception ex) {
+        }
+        return p;
+
     }
 }

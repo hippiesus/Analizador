@@ -9,31 +9,24 @@ package analizador;
  * @author juancarlos
  */
 public class PatronDefecto {
-    private String identificador;
+    private int identificador;
     private String nombre;
     private String clasificacion;
     private String descripcion;
 
-    public PatronDefecto(String identificador, String nombre, String clasificacion, String descripcion) {
-        this.identificador = identificador;
-        this.nombre = nombre;
-        this.clasificacion = clasificacion;
-        this.descripcion = descripcion;
-    }
-
-    
+  
     
     /**
      * @return the identificador
      */
-    public String getIdentificador() {
+    public int getIdentificador() {
         return identificador;
     }
 
     /**
      * @param identificador the identificador to set
      */
-    public void setIdentificador(String identificador) {
+    public void setIdentificador(int identificador) {
         this.identificador = identificador;
     }
 
