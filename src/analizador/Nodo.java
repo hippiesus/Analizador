@@ -4,13 +4,15 @@
  */
 package analizador;
 
+import java.util.LinkedList;
 /**
  *
  * @author juancarlos
  */
 public class Nodo {
     private  String programa;
-
+    
+    LinkedList<Nodo> llamadas= new LinkedList<Nodo>();
     /**
      * @return the programa
      */
