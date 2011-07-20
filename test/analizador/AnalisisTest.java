@@ -4,7 +4,10 @@
  */
 package analizador;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,6 +47,7 @@ public class AnalisisTest {
    // @Test
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
+<<<<<<< HEAD
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
 <<<<<<< HEAD
 =======
@@ -51,6 +55,19 @@ public class AnalisisTest {
 >>>>>>> patrones
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.detectarDefectos(ubicacionArchivos);
+=======
+        String ubicacionArchivos = "";
+        boolean exp;
+        Analisis instance = new Analisis();
+        Map<String,Integer> mapa=instance.detectarDefectos(ubicacionArchivos);
+        if(mapa.size()==2){
+            exp=true;
+        }else{
+            exp=false;
+        }
+        
+        assertTrue(exp);
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     }
 
     /**
@@ -65,6 +82,7 @@ public class AnalisisTest {
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
         assertEquals(1, mapa.size());
         
+<<<<<<< HEAD
     }
    
     @Test
@@ -77,6 +95,8 @@ public class AnalisisTest {
         int res=instance.analizarCierre(ident, patron,programa);
         assertEquals(14,res);
         
+=======
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     }
 
     /**

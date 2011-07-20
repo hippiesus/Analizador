@@ -36,14 +36,18 @@ import org.xml.sax.InputSource;
  */
 public class Analisis {
 
+<<<<<<< HEAD
     final String delimitador = ":";
     final String identificadorOracle = "[A-Za-z0-9._\\$#]+"; // doble \\ por ser caracter especial para java
 
+=======
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     public Map<String, Integer> detectarDefectos(String ubicacionArchivos) {
         Map<String, Integer> mapa = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
+<<<<<<< HEAD
 
         for (int x = 0; x < lista.size(); x++) {
             //valida que solo sean archivos .sql
@@ -187,6 +191,46 @@ public class Analisis {
 
                     }
                 }
+=======
+        System.out.println(lista.size());
+
+        for (int x = 0; x < lista.size(); x++) {
+            //valida que solo sean archivos .sql
+            String ext=lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length()-3,lista.get(x).getPrograma().length());
+            System.out.println("Extencion"+ext);                    
+            if(ext.equals("sql")){
+                analizarNodo(lista.get(x));
+            }
+
+        }
+        return mapa;
+
+    }
+
+    public Map<String, Integer> analizarNodo(Nodo nodo) {
+
+        Map<String, Integer> mapa = new HashMap<String, Integer>();
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+
+            archivo = new File(nodo.getPrograma());
+            System.out.println(archivo);
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                Pattern p = Pattern.compile("open");
+                Matcher m = p.matcher(linea);
+                if (m.find()) {
+                    System.out.println("DEFECTO ENCONTRADO");
+                    System.out.println(linea);
+                }
+
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,6 +245,7 @@ public class Analisis {
             }
         }
 
+<<<<<<< HEAD
 
         return mapa;
     }
@@ -255,6 +300,10 @@ public class Analisis {
         }
         return numLinea;
 
+=======
+
+        return mapa;
+>>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     }
 
     public boolean generarXML(String usuario, String ubicacionArchivos, int cantidadDefectos, int cantidadDefectosBajo, int cantidadDefectosMedio, int cantidadDefectosCritico) {
