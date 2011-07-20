@@ -78,37 +78,38 @@ public class Analisis {
 
 
             for (int x = 0; x < pd.size(); x++) { // para todos los patrones
-                String patron = pd.get(x).getNombre();
+                String patron = pd.get(0).getNombre();
+                System.out.println(patron);
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
+
                     if (patron.contains("identificador")) {
 
                         String patronR = patron.replaceAll("identificador", identificadorOracle);
-
+                        System.out.println(patronR);
                         if (patronR.contains(delimitador)) {
-
                             int delimitadorPosicion = patronR.indexOf(delimitador);
                             String inicio = patronR.substring(0, delimitadorPosicion);
                             String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
 
-                            Pattern p = Pattern.compile(inicio);
+                            Pattern p = Pattern.compile(inicio,Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
                             if (m.find()) {
                                 String ident = m.group(1);
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
                             }
-                          //  System.out.println("inicio"+numLineaInicio);
-                         //   System.out.println("final"+numLineaFinal);
-                            if(numLineaInicio>numLineaFinal){
-                                System.out.println("DEFECTO ENCONTRADOOOOOOOOOOOO");
-                                break;
+                            //  System.out.println("inicio"+numLineaInicio);
+                            //   System.out.println("final"+numLineaFinal);
+                            if (numLineaInicio > numLineaFinal) {
+                                System.out.println("DEFECTO ENCONTRADO" + pd.get(x).getNombre());
+                                //break;
                             }
 
 
                         } else {
-                            Pattern p = Pattern.compile(pd.get(x).getNombre());
+                            Pattern p = Pattern.compile(pd.get(x).getNombre(),Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
                             if (m.find()) {
                                 mapa.put("critico", critico++);
@@ -117,6 +118,40 @@ public class Analisis {
                             }
 
                         }
+
+                    } else {
+
+                        if (patron.contains(delimitador)) {
+                            int delimitadorPosicion = patron.indexOf(delimitador);
+                            String inicio = patron.substring(0, delimitadorPosicion);
+                            String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
+
+                            Pattern p = Pattern.compile(inicio,Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            if (m.find()) {
+                                String ident = m.group(1);
+                                numLineaInicio = numLinea;
+                                numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                            }
+                            //  System.out.println("inicio"+numLineaInicio);
+                            //   System.out.println("final"+numLineaFinal);
+                            if (numLineaInicio > numLineaFinal) {
+                                System.out.println("DEFECTO ENCONTRADO" + pd.get(x).getNombre());
+                                //break;
+                            }
+
+
+                        } else {
+                            Pattern p = Pattern.compile(pd.get(x).getNombre(),Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            if (m.find()) {
+                                mapa.put("critico", critico++);
+                                System.out.println("DEFECTO ENCONTRADO");
+                                System.out.println("NUMERO DE LINEA" + numLinea + "\n" + linea);
+                            }
+
+                        }
+
 
                     }
                 }
@@ -160,13 +195,13 @@ public class Analisis {
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     nLinea++;
-                   // System.out.println("patron"+patron);
-                    String patronR = patron.replace("identificador",identificador);
+                    // System.out.println("patron"+patron);
+                    String patronR = patron.replace("identificador", identificador);
                     Pattern p = Pattern.compile(patronR);
                     Matcher m = p.matcher(linea);
 
                     if (m.find()) {
-                       // System.out.println("encontro");
+                        // System.out.println("encontro");
                         numLinea = nLinea;
                     }
 

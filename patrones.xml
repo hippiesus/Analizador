@@ -1,5 +1,5 @@
 <patrones>
-	<patron>
+	<!--patron>
 		<identificador>1</identificador>
 		<nombre>open\s+(identificador):close\s+(identificador)</nombre>
 		<clasificacion>critico</clasificacion>
@@ -8,10 +8,17 @@
 
 	<patron>
 		<identificador>2</identificador>
-		<nombre>bazzinga identificador</nombre>
+		<nombre>if\s+(identificador)\s+then:end\s+if</nombre>
+		<clasificacion>critico</clasificacion>
+		<descripcion>open</descripcion>
+	</patron-->
+	<patron>
+		<identificador>3</identificador>
+		<nombre>return</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
+
 
 	
 </patrones>
