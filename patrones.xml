@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><xml>
 	<patrones>
 		<identificador>1</identificador>
@@ -6,3 +7,16 @@
 		<descripcion>patron 1</descripcion>
 	</patrones>
 </xml>
+=======
+<patrones>
+	<patron>
+		<identificador>3</identificador>
+		<nombre>return</nombre>
+		<clasificacion>critico</clasificacion>
+		<descripcion>open</descripcion>
+	</patron>
+
+
+
+</patrones>
+>>>>>>> patrones

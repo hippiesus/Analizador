@@ -45,6 +45,10 @@ public class AnalisisTest {
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
+<<<<<<< HEAD
+=======
+        boolean exp;
+>>>>>>> patrones
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.detectarDefectos(ubicacionArchivos);
     }
@@ -60,6 +64,18 @@ public class AnalisisTest {
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
         assertEquals(1, mapa.size());
+        
+    }
+   
+    @Test
+    public void testAnalizarCierre() {
+        System.out.println("analizarCierre");
+        String patron="close\\s+([A-Za-z0-9._$#]+)";
+        String ident="c1";               
+        String programa="/Users/juancarlos/tmp/archivo.sql";
+        Analisis instance = new Analisis();
+        int res=instance.analizarCierre(ident, patron,programa);
+        assertEquals(14,res);
         
     }
 
@@ -80,11 +96,24 @@ public class AnalisisTest {
         boolean result = instance.generarXML(usuario, ubicacionArchivos, cantidadDefectos, cantidadDefectosBajo, cantidadDefectosMedio, cantidadDefectosCritico);
         assertEquals(expResult, result);
     }
+<<<<<<< HEAD
    // @Test
+=======
+        /**
+     * Test of obtenerPatrones method, of class Analisis.
+     */
+    @Test
+>>>>>>> patrones
     public void testObtenerPatrones() {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
         ArrayList result = instance.obtenerPatrones();
+<<<<<<< HEAD
         assertEquals(1,result.size());
     }
+=======
+        assertEquals(1, result.size());
+    }
+    
+>>>>>>> patrones
 }

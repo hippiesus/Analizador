@@ -14,7 +14,11 @@ public class PatronDefecto {
     private String clasificacion;
     private String descripcion;
 
+<<<<<<< HEAD
    
+=======
+  
+>>>>>>> patrones
     
     /**
      * @return the identificador

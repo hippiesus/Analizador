@@ -4,8 +4,6 @@
  */
 package analizador;
 
-import java.util.Scanner;
-
 /**
  *
  * @author juancarlos
@@ -17,9 +15,8 @@ public class Main {
      */
     public static void main(String[] args) {
         Analisis analisis= new Analisis();
-        String ubicacionArchivos = args[0];
-        System.out.println("Los archivos se buscaran en:"+ ubicacionArchivos);
-        analisis.detectarDefectos(ubicacionArchivos);
+        System.out.println("Los archivos se buscaran en:"+ args[0]);
+        analisis.detectarDefectos(args[0]);
         
     }
 }
