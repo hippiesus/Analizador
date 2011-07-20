@@ -6,6 +6,12 @@
 		<descripcion>open</descripcion>
 	</patron>
 
+	<patron>
+		<identificador>2</identificador>
+		<nombre>bazzinga identificador</nombre>
+		<clasificacion>critico</clasificacion>
+		<descripcion>open</descripcion>
+	</patron>
 
 	
 </patrones>

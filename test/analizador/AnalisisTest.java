@@ -53,7 +53,7 @@ public class AnalisisTest {
     /**
      * Test of analizarNodo method, of class Analisis.
      */
-    @Test
+  //  @Test
     public void testAnalizarNodo() {
         System.out.println("analizarNodo");
         Nodo nodo = new Nodo();
@@ -63,11 +63,29 @@ public class AnalisisTest {
         assertEquals(1, mapa.size());
         
     }
+   
+    @Test
+    public void testAnalizarCierre() {
+        /*
+         c1
+close\s+([A-Za-z0-9._$#]+)
+/Users/juancarlos/tmp/archivo.sql
+         
+         */
+        System.out.println("analizarCierre");
+        String patron="close\\s+([A-Za-z0-9._$#]+)";
+        String ident="c1";               
+        String programa="/Users/juancarlos/tmp/archivo.sql";
+        Analisis instance = new Analisis();
+        int res=instance.analizarCierre(ident, patron,programa);
+        assertEquals(14,res);
+        
+    }
 
     /**
      * Test of generarXML method, of class Analisis.
      */
-    @Test
+   // @Test
     public void testGenerarXML() {
         System.out.println("generarXML");
         String usuario = "";
@@ -84,11 +102,12 @@ public class AnalisisTest {
         /**
      * Test of obtenerPatrones method, of class Analisis.
      */
-    @Test
+    //@Test
     public void testObtenerPatrones() {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
         ArrayList result = instance.obtenerPatrones();
         assertEquals(1, result.size());
     }
+    
 }
