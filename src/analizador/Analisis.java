@@ -39,12 +39,11 @@ public class Analisis {
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
-        System.out.println(lista.size());
 
         for (int x = 0; x < lista.size(); x++) {
             //valida que solo sean archivos .sql
             String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
-            System.out.println("Extencion" + ext);
+          //  System.out.println("Extencion" + ext);
             if (ext.equals("sql")) {
                 analizarNodo(lista.get(x));
             }
@@ -65,21 +64,55 @@ public class Analisis {
         try {
 
             archivo = new File(nodo.getPrograma());
-            System.out.println(archivo);
+          //  System.out.println(archivo);
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
             String linea;
-            int critico=0;
-            while ((linea = br.readLine()) != null) {
-                for (int x = 0; x < pd.size(); x++) {
-                    Pattern p = Pattern.compile(pd.get(x).getNombre());
-                    Matcher m = p.matcher(linea);
-                    if (m.find()) {
-                        mapa.put("critico", critico++);
-                        System.out.println("DEFECTO ENCONTRADO");
-                        System.out.println(linea);
+            int numLinea = 0;
+            int critico = 0;
+            int numLineaInicio=0;
+            int numLineaFinal=0;
+            
+            while ((linea = br.readLine()) != null) { // para cada linea del archivo
+                numLinea++;
+                for (int x = 0; x < pd.size(); x++) { // para todos los patrones
+
+                    if (pd.get(x).getNombre().contains(";")) {
+                        int delimitador = pd.get(x).getNombre().indexOf(";");
+                        String inicio = pd.get(x).getNombre().substring(0, delimitador);
+                        String fin = pd.get(x).getNombre().substring(delimitador + 1, pd.get(x).getNombre().length());
+
+                        Pattern p = Pattern.compile(inicio);
+                        Matcher m = p.matcher(linea);
+                        if (m.find()) {
+                            numLineaInicio = numLinea;
+                        }
+                        Pattern pf = Pattern.compile(fin);
+                        Matcher mf = pf.matcher(linea);
+                        if (mf.find()) {
+                            numLineaFinal=numLinea;
+                        }
+                        System.out.println("inicio"+numLineaInicio);
+                        System.out.println("Fin"+numLineaFinal);
+                        if (numLineaInicio > numLineaFinal) {
+                            mapa.put("critico", critico++);
+                            System.out.println("DEFECTO ENCONTRADO");
+                            System.out.println("NUMERO DE LINEA" + numLineaInicio + "\n" + linea);
+                            System.out.println("NUMERO DE LINEA" + numLinea + "\n" + linea);
+                        }
+
+                    } else {
+                        Pattern p = Pattern.compile(pd.get(x).getNombre());
+                        Matcher m = p.matcher(linea);
+                        if (m.find()) {
+                            mapa.put("critico", critico++);
+                            System.out.println("DEFECTO ENCONTRADO");
+                            System.out.println("NUMERO DE LINEA" + numLinea + "\n" + linea);
+                        }
+
                     }
+
                 }
             }
         } catch (Exception e) {
@@ -175,9 +208,9 @@ public class Analisis {
 
             doc.getDocumentElement().normalize();
 
-            NodeList listBloqueos = doc.getElementsByTagName("patrones");
+            NodeList listBloqueos = doc.getElementsByTagName("patron");
             int totalBloqueos = listBloqueos.getLength();
-            System.out.println("Total de PATRONES : " + totalBloqueos);
+          //  System.out.println("Total de PATRONES : " + totalBloqueos);
 
             for (int s = 0; s < listBloqueos.getLength(); s++) {
 
