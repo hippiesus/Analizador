@@ -1,7 +1,7 @@
 <patrones>
 	<patron>
 		<identificador>1</identificador>
-		<nombre>open[^A-Za-z0-9.@_-~#]+;close[^A-Za-z0-9.@_-~#]+</nombre>
+		<nombre>open\s+(identificador):close\s+(identificador)</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
