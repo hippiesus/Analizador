@@ -7,7 +7,6 @@ package analizador;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +27,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
 
 /**
  *
@@ -36,33 +34,24 @@ import org.xml.sax.InputSource;
  */
 public class Analisis {
 
-<<<<<<< HEAD
     final String delimitador = ":";
     final String identificadorOracle = "[A-Za-z0-9._\\$#]+"; // doble \\ por ser caracter especial para java
 
-=======
->>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     public Map<String, Integer> detectarDefectos(String ubicacionArchivos) {
         Map<String, Integer> mapa = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
-<<<<<<< HEAD
 
         for (int x = 0; x < lista.size(); x++) {
             //valida que solo sean archivos .sql
             String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
-<<<<<<< HEAD
-            System.out.println("Extencion" + ext);
-=======
             //  System.out.println("Extencion" + ext);
->>>>>>> patrones
             if (ext.equals("sql")) {
                 analizarNodo(lista.get(x));
             }
 
         }
-
         return mapa;
 
     }
@@ -74,10 +63,7 @@ public class Analisis {
         FileReader fr = null;
         BufferedReader br = null;
         ArrayList<PatronDefecto> pd = obtenerPatrones();
-<<<<<<< HEAD
-=======
 
->>>>>>> patrones
         try {
 
             archivo = new File(nodo.getPrograma());
@@ -85,23 +71,6 @@ public class Analisis {
             br = new BufferedReader(fr);
 
             String linea;
-<<<<<<< HEAD
-            int defect=0;
-            while ((linea = br.readLine()) != null) {
-                //instanciar los patrones
-                System.out.println("while");
-                for (int x = 0; x < pd.size(); x++) {
-                    System.out.println("for");
-                    Pattern p = Pattern.compile(pd.get(x).getNombre());
-                    System.out.println("patron "+pd.get(x).getNombre());
-                    Matcher m = p.matcher(linea);
-                    if (m.find()) {
-                        mapa.put("defecto",defect++);
-                        System.out.println("--------------------------------------------------DEFECTO ENCONTRADO");
-                        System.out.println(linea);
-                    }
-                }
-=======
             int numLinea = 0;
             int critico = 0;
             int numLineaInicio = -1;
@@ -142,7 +111,6 @@ public class Analisis {
 
 
                         } else {
->>>>>>> patrones
 
                             Pattern p = Pattern.compile(patronR, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
@@ -191,46 +159,6 @@ public class Analisis {
 
                     }
                 }
-=======
-        System.out.println(lista.size());
-
-        for (int x = 0; x < lista.size(); x++) {
-            //valida que solo sean archivos .sql
-            String ext=lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length()-3,lista.get(x).getPrograma().length());
-            System.out.println("Extencion"+ext);                    
-            if(ext.equals("sql")){
-                analizarNodo(lista.get(x));
-            }
-
-        }
-        return mapa;
-
-    }
-
-    public Map<String, Integer> analizarNodo(Nodo nodo) {
-
-        Map<String, Integer> mapa = new HashMap<String, Integer>();
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
-
-        try {
-
-            archivo = new File(nodo.getPrograma());
-            System.out.println(archivo);
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                Pattern p = Pattern.compile("open");
-                Matcher m = p.matcher(linea);
-                if (m.find()) {
-                    System.out.println("DEFECTO ENCONTRADO");
-                    System.out.println(linea);
-                }
-
->>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,7 +173,6 @@ public class Analisis {
             }
         }
 
-<<<<<<< HEAD
 
         return mapa;
     }
@@ -300,10 +227,6 @@ public class Analisis {
         }
         return numLinea;
 
-=======
-
-        return mapa;
->>>>>>> 9a5c562ecb70c670dd959f045680580265297e74
     }
 
     public boolean generarXML(String usuario, String ubicacionArchivos, int cantidadDefectos, int cantidadDefectosBajo, int cantidadDefectosMedio, int cantidadDefectosCritico) {
@@ -372,10 +295,7 @@ public class Analisis {
     }
 
     public ArrayList<PatronDefecto> obtenerPatrones() {
-<<<<<<< HEAD
-=======
 
->>>>>>> patrones
         ArrayList<PatronDefecto> p = new ArrayList<PatronDefecto>();
         try {
 
@@ -385,47 +305,6 @@ public class Analisis {
 
             doc.getDocumentElement().normalize();
 
-<<<<<<< HEAD
-            NodeList listPatrones = doc.getElementsByTagName("patrones");
-            int totalPatrones = listPatrones.getLength();
-            System.out.println("Total de Patrones: " + totalPatrones);
-
-            for (int s = 0; s < listPatrones.getLength(); s++) {
-
-                Node bloqueo = listPatrones.item(s);
-                if (bloqueo.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element bloq = (Element) bloqueo;
-                    PatronDefecto pd = new PatronDefecto();
-                    // -------
-                    NodeList cod_bloqueo = bloq.getElementsByTagName("identificador");
-                    Element firstNameElement = (Element) cod_bloqueo.item(0);
-
-                    NodeList cod_bloqueoList = firstNameElement.getChildNodes();
-                    if (((Node) cod_bloqueoList.item(0)) != null) {
-                        pd.setIdentificador(Integer.parseInt(((Node) cod_bloqueoList.item(0)).getNodeValue().trim()));
-                    }
-
-                    // -------
-                    NodeList des_bloqueo = bloq.getElementsByTagName("nombre");
-                    Element des_bloqueoElement = (Element) des_bloqueo.item(0);
-
-                    NodeList textLNList = des_bloqueoElement.getChildNodes();
-                    if (((Node) textLNList.item(0)) != null) {
-                        pd.setNombre(((Node) textLNList.item(0)).getNodeValue().trim());
-
-                    }
-                    // ----
-                    NodeList fecha_bloqueo = bloq.getElementsByTagName("clasificacion");
-                    Element fecha_bloqueoElement = (Element) fecha_bloqueo.item(0);
-
-                    NodeList textAgeList = fecha_bloqueoElement.getChildNodes();
-                    if (((Node) textAgeList.item(0)) != null) {
-                        pd.setClasificacion(((Node) textAgeList.item(0)).getNodeValue().trim());
-                    }
-                    // ----
-                    NodeList descripcion = bloq.getElementsByTagName("descripcion");
-=======
             NodeList listBloqueos = doc.getElementsByTagName("patron");
             int totalBloqueos = listBloqueos.getLength();
             //  System.out.println("Total de PATRONES : " + totalBloqueos);
@@ -466,34 +345,22 @@ public class Analisis {
 
                     // ----
                     NodeList descripcion = pa.getElementsByTagName("descripcion");
->>>>>>> patrones
                     Element descripcionElement = (Element) descripcion.item(0);
 
                     NodeList descripcionList = descripcionElement.getChildNodes();
                     if (((Node) descripcionList.item(0)) != null) {
                         pd.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
                     }
-<<<<<<< HEAD
-=======
 
->>>>>>> patrones
                     p.add(pd);
 
                 }
 
             }
 
-<<<<<<< HEAD
-        } catch (Exception err) {
-        }
-
-
-        return p;
-=======
         } catch (Exception ex) {
         }
         return p;
 
->>>>>>> patrones
     }
 }
