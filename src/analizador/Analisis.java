@@ -21,6 +21,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,19 +36,27 @@ import org.w3c.dom.Text;
  */
 public class Analisis {
 
+    private final static Logger log = Logger.getLogger(Analisis.class);
     final String delimitador = ":";
-    final String identificadorOracle = "[A-Za-z0-9._\\$#]+"; // doble \\ por ser caracter especial para java
+    final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
+
+    public Analisis() {
+
+        BasicConfigurator.configure();
+
+    }
 
     public Map<String, Integer> detectarDefectos(String ubicacionArchivos) {
         Map<String, Integer> mapa = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
+        log.info("Tamaño lista" + lista.size());
 
         for (int x = 0; x < lista.size(); x++) {
             //valida que solo sean archivos .sql
             String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
-            //  System.out.println("Extencion" + ext);
+            log.info("Filtrando Archivos SQL");
             if (ext.equals("sql")) {
                 analizarNodo(lista.get(x));
             }
@@ -76,33 +86,37 @@ public class Analisis {
             int numLineaInicio = -1;
             int numLineaFinal = -1;
 
-            while ((linea = br.readLine()) != null) { // para cada linea del archivo
+            log.info("Cantidad de patrones" + pd.size());
+            for (int x = 0; x < pd.size(); x++) {
+                // para todos los patrones
 
-                numLinea++;
+                while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
+                    numLinea++;
 
-                for (int x = 0; x < pd.size(); x++) { // para todos los patrones
                     String patron = pd.get(0).getNombre();
-
+                    log.info("Patron " + patron);
                     if (patron.contains("identificador")) {
-
+                        log.info("Patron con identificador");
                         String patronR = patron.replaceAll("identificador", identificadorOracle);
-                        
+
                         if (patronR.contains(delimitador)) {
-                            
+                            log.info("Patron con delimitador");
                             int delimitadorPosicion = patronR.indexOf(delimitador);
                             String inicio = patronR.substring(0, delimitadorPosicion);
-                            String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
-
+                            String cierre = patronR.substring(patronR.indexOf(delimitador) + 1, patronR.length());
+                            log.info("Patron inicio " + inicio);
+                            log.info("Patron cierre " + cierre);
                             Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
+
                             if (m.find()) {
                                 String ident = m.group(1);
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
                             }
-                            //  System.out.println("inicio"+numLineaInicio);
-                            //   System.out.println("final"+numLineaFinal);
+                            log.info("Linea inicio " + numLineaInicio);
+                            log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
                                 System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
@@ -111,9 +125,10 @@ public class Analisis {
 
 
                         } else {
-
+                            log.info("Patron sin delimitador");
                             Pattern p = Pattern.compile(patronR, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
+                            log.info("Patron reemplazado " + patronR);
                             if (m.find()) {
                                 mapa.put("critico", critico++);
                                 System.out.println("DEFECTO ENCONTRADO");
@@ -124,11 +139,14 @@ public class Analisis {
 
                     } else {
 
+                        log.info("Patron sin identificador");
                         if (patron.contains(delimitador)) {
+                            log.info("Patron con delimitador");
                             int delimitadorPosicion = patron.indexOf(delimitador);
                             String inicio = patron.substring(0, delimitadorPosicion);
                             String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
-
+                            log.info("Patron inicio " + inicio);
+                            log.info("Patron cierre " + cierre);
                             Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
                             if (m.find()) {
@@ -136,8 +154,9 @@ public class Analisis {
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
                             }
-                            //  System.out.println("inicio"+numLineaInicio);
-                            //   System.out.println("final"+numLineaFinal);
+                            log.info("Linea inicio " + numLineaInicio);
+                            log.info("Linea final " + numLineaFinal);
+
                             if (numLineaInicio > numLineaFinal) {
                                 System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
@@ -146,8 +165,10 @@ public class Analisis {
 
 
                         } else {
-                            Pattern p = Pattern.compile(pd.get(x).getNombre(), Pattern.CASE_INSENSITIVE);
+                            log.info("Patron sin delimitador");
+                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
+                            log.info("Patron "+patron);
                             if (m.find()) {
                                 mapa.put("critico", critico++);
                                 System.out.println("DEFECTO ENCONTRADO");
@@ -173,7 +194,6 @@ public class Analisis {
             }
         }
 
-
         return mapa;
     }
 
@@ -195,18 +215,17 @@ public class Analisis {
             String linea;
             int nLinea = 0;
 
-            while ((linea = br.readLine()) != null) { // para cada linea del archivo
+            log.info("analizarCierre");
+            for (int x = 0; x < pd.size(); x++) { // para todos los patrones
+                while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                nLinea++;
-                for (int x = 0; x < pd.size(); x++) { // para todos los patrones
-
-                    // System.out.println("patron"+patron);
+                    nLinea++;
+                    log.info("Patron "+patron);
                     String patronR = patron.replace("identificador", identificador);
                     Pattern p = Pattern.compile(patronR);
                     Matcher m = p.matcher(linea);
-
+                    log.info("Patron reemplazado "+patronR);
                     if (m.find()) {
-                        // System.out.println("encontro");
                         numLinea = nLinea;
                     }
 
