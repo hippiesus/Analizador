@@ -1,7 +1,13 @@
 <patrones>
 	<patron>
-		<identificador>2</identificador>
-		<nombre>if\s+\(identificador\)\s+then:end\s+if</nombre>
+		<identificador>3</identificador>
+		<nombre>return</nombre>
+		<clasificacion>critico</clasificacion>
+		<descripcion>open</descripcion>
+	</patron>
+	<patron>
+		<identificador>3</identificador>
+		<nombre>begin</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
