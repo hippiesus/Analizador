@@ -67,7 +67,7 @@ public class Analisis {
     }
 
     public Map<String, Integer> analizarNodo(Nodo nodo) {
-
+        //MAPA clasificiacion del defecto, cantidad
         Map<String, Integer> mapa = new HashMap<String, Integer>();
         File archivo = null;
         FileReader fr = null;
@@ -80,7 +80,9 @@ public class Analisis {
 
             String linea;
             int numLinea = 0;
-            int critico = 0;
+            int cantidadCritico = 0;
+            int cantidadMedio = 0;
+            int cantidadBajo = 0;
             int numLineaInicio = -1;
             int numLineaFinal = -1;
 
@@ -90,7 +92,6 @@ public class Analisis {
                 br = new BufferedReader(fr);
 
                 String patron = pd.get(x).getNombre();
-                System.out.println("                                                                                               " + patron);
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
@@ -118,6 +119,13 @@ public class Analisis {
                             log.info("Linea inicio " + numLineaInicio);
                             log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
+                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
                                 System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                                 numLineaInicio = -1;
@@ -131,7 +139,13 @@ public class Analisis {
                             Matcher m = p.matcher(linea);
                             log.info("Patron reemplazado " + patronR);
                             if (m.find()) {
-                                mapa.put("critico", critico++);
+                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
                                 System.out.println("DEFECTO ENCONTRADO");
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                             }
@@ -159,6 +173,13 @@ public class Analisis {
                             log.info("Linea final " + numLineaFinal);
 
                             if (numLineaInicio > numLineaFinal) {
+                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
                                 System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                                 numLineaInicio = -1;
@@ -172,7 +193,13 @@ public class Analisis {
                             Matcher m = p.matcher(linea);
                             log.info("Patron " + patron);
                             if (m.find()) {
-                                mapa.put("critico", critico++);
+                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
                                 System.out.println("DEFECTO ENCONTRADO");
                                 System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                             }
@@ -182,7 +209,13 @@ public class Analisis {
 
                     }
                 }
+
             }
+
+            mapa.put("critico", cantidadCritico);
+            mapa.put("medio", cantidadMedio);
+            mapa.put("bajo", cantidadBajo);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

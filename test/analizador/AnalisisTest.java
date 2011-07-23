@@ -60,7 +60,14 @@ public class AnalisisTest {
         nodo.setPrograma("/Users/juancarlos/tmp/archivo.sql");
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
-        assertEquals(1, mapa.size());
+        assertEquals(3, mapa.size());
+        int critico=mapa.get("critico");
+        int medio=mapa.get("medio");
+        int bajo=mapa.get("bajo");
+        assertEquals(3,critico);
+        assertEquals(1,medio);
+        assertEquals(4,bajo);
+        
         
     }
    
@@ -101,7 +108,7 @@ public class AnalisisTest {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
         ArrayList result = instance.obtenerPatrones();
-        assertEquals(1, result.size());
+        assertEquals(4, result.size());
     }
     
 }
