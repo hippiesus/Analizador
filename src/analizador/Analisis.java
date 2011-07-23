@@ -165,9 +165,8 @@ public class Analisis {
                             Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
                             if (m.find()) {
-                                String ident = m.group(1);
                                 numLineaInicio = numLinea;
-                                numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                                numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
                             }
                             log.info("Linea inicio " + numLineaInicio);
                             log.info("Linea final " + numLineaFinal);
@@ -251,12 +250,20 @@ public class Analisis {
             int nLinea = 0;
 
             log.info("analizarCierre");
+            String patronR;
+            if (identificador != null) {
+                log.info("Patron " + patron);
+                patronR = patron.replace("identificador", identificador);
+            } else {
+
+                log.info("Patron " + patron);
+                patronR = patron;
+            }
             for (int x = 0; x < pd.size(); x++) { // para todos los patrones
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     nLinea++;
-                    log.info("Patron " + patron);
-                    String patronR = patron.replace("identificador", identificador);
+
                     Pattern p = Pattern.compile(patronR);
                     Matcher m = p.matcher(linea);
                     log.info("Patron reemplazado " + patronR);
