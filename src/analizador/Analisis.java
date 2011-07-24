@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -293,8 +294,8 @@ public class Analisis {
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             DOMImplementation implementation = builder.getDOMImplementation();
-            Document document = implementation.createDocument(null, "xml", null);
-            Element raiz = document.createElement("UltimaEjecucion");
+            Document document = implementation.createDocument(null, "defecto", null);
+            Element raiz = document.createElement("ultimaEjecucion");
 
             Element fechaElem = document.createElement("fecha");
             Text textFecha = document.createTextNode(new Date().toString());
@@ -333,7 +334,7 @@ public class Analisis {
             ubicacionElem.appendChild(textUb);
             cantDefElem.appendChild(textCd);
             cantDefBElem.appendChild(textCdb);
-            cantDefMElem.appendChild(textCdc);
+            cantDefMElem.appendChild(textCdm);
             cantDefCElem.appendChild(textCdc);
 
 
@@ -343,6 +344,7 @@ public class Analisis {
             Result result = new StreamResult(new java.io.File("defectos.xml"));
             Result console = new StreamResult(System.out);
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);
             transformer.transform(source, console);
             return true;
