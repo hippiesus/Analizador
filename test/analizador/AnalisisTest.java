@@ -4,6 +4,8 @@
  */
 package analizador;
 
+
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
 import org.junit.After;
@@ -47,7 +49,7 @@ public class AnalisisTest {
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
         boolean exp;
         Analisis instance = new Analisis();
-        Map<String,Integer> mapa=instance.detectarDefectos(ubicacionArchivos);
+        instance.detectarDefectos(ubicacionArchivos);
     }
 
     /**
@@ -89,16 +91,11 @@ public class AnalisisTest {
     @Test
     public void testGenerarXML() {
         System.out.println("generarXML");
-        String usuario = "";
-        String ubicacionArchivos = "/Users/juancarlos/tmp/";
-        int cantidadDefectos = 0;
-        int cantidadDefectosBajo = 0;
-        int cantidadDefectosMedio = 0;
-        int cantidadDefectosCritico = 0;
         Analisis instance = new Analisis();
-        boolean expResult = true;
-        boolean result = instance.generarXML(usuario, ubicacionArchivos, cantidadDefectos, cantidadDefectosBajo, cantidadDefectosMedio, cantidadDefectosCritico);
-        assertEquals(expResult, result);
+        ArrayList<String> lista = new ArrayList<String>();
+        HashMap<String,Integer> mapa= new HashMap<String, Integer>(); 
+        boolean exp=instance.generarXML(mapa, lista);
+        assertTrue(exp);
     }
         /**
      * Test of obtenerPatrones method, of class Analisis.

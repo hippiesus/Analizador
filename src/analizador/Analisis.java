@@ -46,10 +46,12 @@ public class Analisis {
 
     }
 
-    public Map<String, Integer> detectarDefectos(String ubicacionArchivos) {
+    public void detectarDefectos(String ubicacionArchivos) {
         Map<String, Integer> mapa = new HashMap<String, Integer>();
+        Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
+        ArrayList<String> archivosFiltrados = new ArrayList<String>();
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
         log.info("Tamaño lista " + lista.size());
 
@@ -57,13 +59,18 @@ public class Analisis {
             //valida que solo sean archivos .sql
             String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
             log.info("Filtrando Archivos SQL");
+
             if (ext.equals("sql")) {
+                archivosFiltrados.add(lista.get(x).getPrograma());
                 log.info("Nombre archivo " + lista.get(x).getPrograma());
-                analizarNodo(lista.get(x));
+                tmp = analizarNodo(lista.get(x));
+                mapa.put(archivosFiltrados.get(x) + "critico", tmp.get("critico"));
+                mapa.put(archivosFiltrados.get(x) + "medio", tmp.get("medio"));
+                mapa.put(archivosFiltrados.get(x) + "bajo", tmp.get("bajo"));
             }
 
         }
-        return mapa;
+        generarXML(mapa, archivosFiltrados);
 
     }
 
@@ -289,55 +296,57 @@ public class Analisis {
 
     }
 
-    public boolean generarXML(String usuario, String ubicacionArchivos, int cantidadDefectos, int cantidadDefectosBajo, int cantidadDefectosMedio, int cantidadDefectosCritico) {
+    public boolean generarXML(Map mapa, ArrayList<String> nombreArchivo) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             DOMImplementation implementation = builder.getDOMImplementation();
-            Document document = implementation.createDocument(null, "defecto", null);
-            Element raiz = document.createElement("ultimaEjecucion");
+            Document document = implementation.createDocument(null, "estadisticas", null);
 
-            Element fechaElem = document.createElement("fecha");
-            Text textFecha = document.createTextNode(new Date().toString());
+            for (int x = 0; x < nombreArchivo.size(); x++) {
+                Element raiz = document.createElement("estadistica");
 
-
-            Element usuarioElem = document.createElement("usuario");
-            Text text = document.createTextNode(usuario);
-
-            Element ubicacionElem = document.createElement("ubicacionArchivos");
-            Text textUb = document.createTextNode(ubicacionArchivos);
-
-            Element cantDefElem = document.createElement("cantidadDefectos");
-            Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));
-
-            Element cantDefBElem = document.createElement("cantidadDefectosBajo");
-            Text textCdb = document.createTextNode(String.valueOf(cantidadDefectosBajo));
-
-            Element cantDefMElem = document.createElement("cantidadDefectosMedio");
-            Text textCdm = document.createTextNode(String.valueOf(cantidadDefectosMedio));
-
-            Element cantDefCElem = document.createElement("cantidadDefectosCritico");
-            Text textCdc = document.createTextNode(String.valueOf(cantidadDefectosCritico));
-
-            document.getDocumentElement().appendChild(raiz);
-
-            raiz.appendChild(fechaElem);
-            raiz.appendChild(usuarioElem);
-            raiz.appendChild(ubicacionElem);
-            raiz.appendChild(cantDefElem);
-            raiz.appendChild(cantDefBElem);
-            raiz.appendChild(cantDefMElem);
-            raiz.appendChild(cantDefCElem);
-
-            fechaElem.appendChild(textFecha);
-            usuarioElem.appendChild(text);
-            ubicacionElem.appendChild(textUb);
-            cantDefElem.appendChild(textCd);
-            cantDefBElem.appendChild(textCdb);
-            cantDefMElem.appendChild(textCdm);
-            cantDefCElem.appendChild(textCdc);
+                Element fechaElem = document.createElement("fecha");
+                Text textFecha = document.createTextNode(new Date().toString());
 
 
+                /* Element usuarioElem = document.createElement("usuario");
+                Text text = document.createTextNode(usuario);*/
+
+                Element ubicacionElem = document.createElement("nombreArchivo");
+                Text textUb = document.createTextNode(nombreArchivo.get(x));
+
+                /* Element cantDefElem = document.createElement("cantidadDefectos");
+                Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));*/
+
+                Element cantDefBElem = document.createElement("cantidadDefectosBajo");
+                Text textCdb = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "bajo")));
+
+                Element cantDefMElem = document.createElement("cantidadDefectosMedio");
+                Text textCdm = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "medio")));
+
+                Element cantDefCElem = document.createElement("cantidadDefectosCritico");
+                Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "critico")));
+
+                document.getDocumentElement().appendChild(raiz);
+
+                raiz.appendChild(fechaElem);
+                //   raiz.appendChild(usuarioElem);
+                raiz.appendChild(ubicacionElem);
+                //   raiz.appendChild(cantDefElem);
+                raiz.appendChild(cantDefBElem);
+                raiz.appendChild(cantDefMElem);
+                raiz.appendChild(cantDefCElem);
+
+                fechaElem.appendChild(textFecha);
+                //   usuarioElem.appendChild(text);
+                ubicacionElem.appendChild(textUb);
+                //   cantDefElem.appendChild(textCd);
+                cantDefBElem.appendChild(textCdb);
+                cantDefMElem.appendChild(textCdm);
+                cantDefCElem.appendChild(textCdc);
+
+            }
 
             document.setXmlVersion("1.0");
             Source source = new DOMSource(document);
@@ -366,13 +375,11 @@ public class Analisis {
 
             doc.getDocumentElement().normalize();
 
-            NodeList listBloqueos = doc.getElementsByTagName("patron");
-            int totalBloqueos = listBloqueos.getLength();
-            //  System.out.println("Total de PATRONES : " + totalBloqueos);
+            NodeList listPatrones = doc.getElementsByTagName("patron");
 
-            for (int s = 0; s < listBloqueos.getLength(); s++) {
+            for (int s = 0; s < listPatrones.getLength(); s++) {
 
-                Node patron = listBloqueos.item(s);
+                Node patron = listPatrones.item(s);
                 if (patron.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element pa = (Element) patron;
