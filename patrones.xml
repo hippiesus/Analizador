@@ -1,14 +1,14 @@
 <patrones>
 	<patron>
 		<identificador>1</identificador>
-		<nombre>open\s+(identificador):close\s+(identificador)</nombre>
+		<nombre>open identificador:close identificador</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
 
 	<patron>
 		<identificador>2</identificador>
-		<nombre>if\s+\(identificador\)\s+then:end\s+if</nombre>
+		<nombre>if (identificador) then:end if</nombre>
 		<clasificacion>medio</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>

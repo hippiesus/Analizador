@@ -40,6 +40,12 @@ public class Analisis {
     private final static Logger log = Logger.getLogger(Analisis.class);
     final String delimitador = ":";
     final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
+    final String espacioBlanco = "\\\\s+";
+    final String parentesisApertura = "\\\\(";
+    final String parentesisCierre = "\\\\)";
+    final String critico = "critico";
+    final String medio = "medio";
+    final String bajo = "bajo";
 
     public Analisis() {
         BasicConfigurator.configure();
@@ -64,9 +70,9 @@ public class Analisis {
                 archivosFiltrados.add(lista.get(x).getPrograma());
                 log.info("Nombre archivo " + lista.get(x).getPrograma());
                 tmp = analizarNodo(lista.get(x));
-                mapa.put(archivosFiltrados.get(x) + "critico", tmp.get("critico"));
-                mapa.put(archivosFiltrados.get(x) + "medio", tmp.get("medio"));
-                mapa.put(archivosFiltrados.get(x) + "bajo", tmp.get("bajo"));
+                mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
+                mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
+                mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
             }
 
         }
@@ -100,20 +106,30 @@ public class Analisis {
                 br = new BufferedReader(fr);
 
                 String patron = pd.get(x).getNombre();
+                if (patron.contains(" ")) {
+                    log.info("Reemplazando espacio en blanco");
+                    patron = patron.replaceAll(" ", espacioBlanco);
+                }
+                if (patron.contains("(") && patron.contains(")")) {
+                    log.info("Reemplazando ( )");
+                    patron = patron.replaceAll("\\(", parentesisApertura);
+                    patron = patron.replaceAll("\\)", parentesisCierre);
+                }
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
 
+
                     log.info("Patron " + patron);
                     if (patron.contains("identificador")) {
                         log.info("Patron con identificador");
-                        String patronR = patron.replaceAll("identificador", identificadorOracle);
+                        patron = patron.replaceAll("identificador", identificadorOracle);
 
-                        if (patronR.contains(delimitador)) {
+                        if (patron.contains(delimitador)) {
                             log.info("Patron con delimitador");
-                            int delimitadorPosicion = patronR.indexOf(delimitador);
-                            String inicio = patronR.substring(0, delimitadorPosicion);
-                            String cierre = patronR.substring(patronR.indexOf(delimitador) + 1, patronR.length());
+                            int delimitadorPosicion = patron.indexOf(delimitador);
+                            String inicio = patron.substring(0, delimitadorPosicion);
+                            String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
                             log.info("Patron inicio " + inicio);
                             log.info("Patron cierre " + cierre);
                             Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
@@ -127,9 +143,9 @@ public class Analisis {
                             log.info("Linea inicio " + numLineaInicio);
                             log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
-                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
                                     cantidadMedio++;
                                 } else {
                                     cantidadBajo++;
@@ -143,13 +159,13 @@ public class Analisis {
 
                         } else {
                             log.info("Patron sin delimitador");
-                            Pattern p = Pattern.compile(patronR, Pattern.CASE_INSENSITIVE);
+                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
                             Matcher m = p.matcher(linea);
-                            log.info("Patron reemplazado " + patronR);
+                            log.info("Patron reemplazado " + patron);
                             if (m.find()) {
-                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
                                     cantidadMedio++;
                                 } else {
                                     cantidadBajo++;
@@ -180,9 +196,9 @@ public class Analisis {
                             log.info("Linea final " + numLineaFinal);
 
                             if (numLineaInicio > numLineaFinal) {
-                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
                                     cantidadMedio++;
                                 } else {
                                     cantidadBajo++;
@@ -200,9 +216,9 @@ public class Analisis {
                             Matcher m = p.matcher(linea);
                             log.info("Patron " + patron);
                             if (m.find()) {
-                                if (pd.get(x).getClasificacion().equals("critico")) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals("medio")) {
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
                                     cantidadMedio++;
                                 } else {
                                     cantidadBajo++;
@@ -219,9 +235,9 @@ public class Analisis {
 
             }
 
-            mapa.put("critico", cantidadCritico);
-            mapa.put("medio", cantidadMedio);
-            mapa.put("bajo", cantidadBajo);
+            mapa.put(critico, cantidadCritico);
+            mapa.put(medio, cantidadMedio);
+            mapa.put(bajo, cantidadBajo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -320,13 +336,13 @@ public class Analisis {
                 Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));*/
 
                 Element cantDefBElem = document.createElement("cantidadDefectosBajo");
-                Text textCdb = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "bajo")));
+                Text textCdb = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + bajo)));
 
                 Element cantDefMElem = document.createElement("cantidadDefectosMedio");
-                Text textCdm = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "medio")));
+                Text textCdm = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + medio)));
 
                 Element cantDefCElem = document.createElement("cantidadDefectosCritico");
-                Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + "critico")));
+                Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + critico)));
 
                 document.getDocumentElement().appendChild(raiz);
 
