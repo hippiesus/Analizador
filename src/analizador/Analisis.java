@@ -99,6 +99,8 @@ public class Analisis {
             int cantidadBajo = 0;
             int numLineaInicio = -1;
             int numLineaFinal = -1;
+            String inicio=null;
+            String cierre=null;
 
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
@@ -115,122 +117,69 @@ public class Analisis {
                     patron = patron.replaceAll("\\(", parentesisApertura);
                     patron = patron.replaceAll("\\)", parentesisCierre);
                 }
+                log.info("Patron " + patron);
+
+                if (patron.contains("identificador")) {
+                    log.info("Patron con identificador");
+                    patron = patron.replaceAll("identificador", identificadorOracle);
+                }
+                if (patron.contains(delimitador)) {
+                    log.info("Patron con delimitador");
+                    int delimitadorPosicion = patron.indexOf(delimitador);
+                    inicio = patron.substring(0, delimitadorPosicion);
+                    cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
+                }
+
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
 
+                    if (patron.contains(delimitador)) {
+                        log.info("Patron con delimitador");
+                        Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
+                        Matcher m = p.matcher(linea);
 
-                    log.info("Patron " + patron);
-                    if (patron.contains("identificador")) {
-                        log.info("Patron con identificador");
-                        patron = patron.replaceAll("identificador", identificadorOracle);
-
-                        if (patron.contains(delimitador)) {
-                            log.info("Patron con delimitador");
-                            int delimitadorPosicion = patron.indexOf(delimitador);
-                            String inicio = patron.substring(0, delimitadorPosicion);
-                            String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
-                            log.info("Patron inicio " + inicio);
-                            log.info("Patron cierre " + cierre);
-                            Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
-                            Matcher m = p.matcher(linea);
-
-                            if (m.find()) {
-                                String ident = m.group(1);
-                                numLineaInicio = numLinea;
-                                numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
-                            }
-                            log.info("Linea inicio " + numLineaInicio);
-                            log.info("Linea final " + numLineaFinal);
-                            if (numLineaInicio > numLineaFinal) {
-                                if (pd.get(x).getClasificacion().equals(critico)) {
-                                    cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                    cantidadMedio++;
-                                } else {
-                                    cantidadBajo++;
-                                }
-                                System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
-                                System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
-                                numLineaInicio = -1;
-                                numLineaFinal = -1;
-                            }
-
-
-                        } else {
-                            log.info("Patron sin delimitador");
-                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
-                            Matcher m = p.matcher(linea);
-                            log.info("Patron reemplazado " + patron);
-                            if (m.find()) {
-                                if (pd.get(x).getClasificacion().equals(critico)) {
-                                    cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                    cantidadMedio++;
-                                } else {
-                                    cantidadBajo++;
-                                }
-                                System.out.println("DEFECTO ENCONTRADO");
-                                System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
-                            }
-
+                        if (m.find()) {
+                            String ident = m.group(1);
+                            numLineaInicio = numLinea;
+                            numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
                         }
+                        log.info("Linea inicio " + numLineaInicio);
+                        log.info("Linea final " + numLineaFinal);
+                        if (numLineaInicio > numLineaFinal) {
+                            if (pd.get(x).getClasificacion().equals(critico)) {
+                                cantidadCritico++;
+                            } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                cantidadMedio++;
+                            } else {
+                                cantidadBajo++;
+                            }
+                            System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
+                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
+                            numLineaInicio = -1;
+                            numLineaFinal = -1;
+                        }
+
 
                     } else {
-
-                        log.info("Patron sin identificador");
-                        if (patron.contains(delimitador)) {
-                            log.info("Patron con delimitador");
-                            int delimitadorPosicion = patron.indexOf(delimitador);
-                            String inicio = patron.substring(0, delimitadorPosicion);
-                            String cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
-                            log.info("Patron inicio " + inicio);
-                            log.info("Patron cierre " + cierre);
-                            Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
-                            Matcher m = p.matcher(linea);
-                            if (m.find()) {
-                                numLineaInicio = numLinea;
-                                numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
+                        log.info("Patron sin delimitador");
+                        Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
+                        Matcher m = p.matcher(linea);
+                        log.info("Patron reemplazado " + patron);
+                        if (m.find()) {
+                            if (pd.get(x).getClasificacion().equals(critico)) {
+                                cantidadCritico++;
+                            } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                cantidadMedio++;
+                            } else {
+                                cantidadBajo++;
                             }
-                            log.info("Linea inicio " + numLineaInicio);
-                            log.info("Linea final " + numLineaFinal);
-
-                            if (numLineaInicio > numLineaFinal) {
-                                if (pd.get(x).getClasificacion().equals(critico)) {
-                                    cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                    cantidadMedio++;
-                                } else {
-                                    cantidadBajo++;
-                                }
-                                System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
-                                System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
-                                numLineaInicio = -1;
-                                numLineaFinal = -1;
-                            }
-
-
-                        } else {
-                            log.info("Patron sin delimitador");
-                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
-                            Matcher m = p.matcher(linea);
-                            log.info("Patron " + patron);
-                            if (m.find()) {
-                                if (pd.get(x).getClasificacion().equals(critico)) {
-                                    cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                    cantidadMedio++;
-                                } else {
-                                    cantidadBajo++;
-                                }
-                                System.out.println("DEFECTO ENCONTRADO");
-                                System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
-                            }
-
+                            System.out.println("DEFECTO ENCONTRADO");
+                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                         }
 
-
                     }
+
                 }
 
             }
@@ -274,23 +223,23 @@ public class Analisis {
             int nLinea = 0;
 
             log.info("analizarCierre");
-            String patronR;
+
             if (identificador != null) {
                 log.info("Patron " + patron);
-                patronR = patron.replace("identificador", identificador);
+                patron = patron.replace("identificador", identificador);
             } else {
 
                 log.info("Patron " + patron);
-                patronR = patron;
+                patron = patron;
             }
             for (int x = 0; x < pd.size(); x++) { // para todos los patrones
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     nLinea++;
 
-                    Pattern p = Pattern.compile(patronR);
+                    Pattern p = Pattern.compile(patron);
                     Matcher m = p.matcher(linea);
-                    log.info("Patron reemplazado " + patronR);
+                    log.info("Patron reemplazado " + patron);
                     if (m.find()) {
                         numLinea = nLinea;
                     }
