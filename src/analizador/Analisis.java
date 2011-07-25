@@ -7,6 +7,7 @@ package analizador;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,10 +16,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -30,6 +34,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -87,20 +92,19 @@ public class Analisis {
         FileReader fr = null;
         BufferedReader br = null;
         ArrayList<PatronDefecto> pd = obtenerPatrones();
+        String linea;
+        int numLinea = 0;
+        int cantidadCritico = 0;
+        int cantidadMedio = 0;
+        int cantidadBajo = 0;
+        int numLineaInicio = -1;
+        int numLineaFinal = -1;
+        String inicio = null;
+        String cierre = null;
 
         try {
 
             archivo = new File(nodo.getPrograma());
-
-            String linea;
-            int numLinea = 0;
-            int cantidadCritico = 0;
-            int cantidadMedio = 0;
-            int cantidadBajo = 0;
-            int numLineaInicio = -1;
-            int numLineaFinal = -1;
-            String inicio=null;
-            String cierre=null;
 
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
@@ -188,8 +192,9 @@ public class Analisis {
             mapa.put(medio, cantidadMedio);
             mapa.put(bajo, cantidadBajo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+
         } finally {
 
             try {
@@ -197,7 +202,8 @@ public class Analisis {
                     fr.close();
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
+                log.error(e2.getMessage());
+
             }
         }
 
@@ -245,16 +251,17 @@ public class Analisis {
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+
         } finally {
 
             try {
                 if (null != fr) {
                     fr.close();
                 }
-            } catch (Exception e2) {
-                e2.printStackTrace();
+            } catch (IOException e2) {
+                log.error(e2.getMessage());
             }
         }
         return numLinea;
@@ -322,8 +329,16 @@ public class Analisis {
             transformer.transform(source, result);
             transformer.transform(source, console);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            log.error(e.getMessage());
+            return false;
+
+        } catch (TransformerConfigurationException e) {
+            log.error(e.getMessage());
+            return false;
+
+        } catch (TransformerException e) {
+            log.error(e.getMessage());
             return false;
 
         }
@@ -391,8 +406,14 @@ public class Analisis {
 
             }
 
-        } catch (Exception ex) {
+        } catch (SAXException e) {
+            log.error(e.getMessage());
+        } catch (ParserConfigurationException e) {
+            log.error(e.getMessage());
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
+
         return p;
 
     }

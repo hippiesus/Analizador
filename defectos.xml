@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <estadisticas>
 <estadistica>
-<fecha>Mon Jul 25 17:21:19 CLT 2011</fecha>
+<fecha>Mon Jul 25 17:42:05 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo.sql</nombreArchivo>
 <cantidadDefectosBajo>4</cantidadDefectosBajo>
 <cantidadDefectosMedio>1</cantidadDefectosMedio>
 <cantidadDefectosCritico>3</cantidadDefectosCritico>
 </estadistica>
 <estadistica>
-<fecha>Mon Jul 25 17:21:19 CLT 2011</fecha>
+<fecha>Mon Jul 25 17:42:05 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo2.sql</nombreArchivo>
 <cantidadDefectosBajo>0</cantidadDefectosBajo>
 <cantidadDefectosMedio>0</cantidadDefectosMedio>
