@@ -59,7 +59,7 @@ public class AnalisisTest {
     public void testAnalizarNodo() {
         System.out.println("analizarNodo");
         Nodo nodo = new Nodo();
-        nodo.setPrograma("/Users/juancarlos/tmp/archivo.sql");
+        nodo.setPrograma("/Users/juancarlos/tmp/findcourse.sql");
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
         assertEquals(3, mapa.size());
@@ -78,7 +78,7 @@ public class AnalisisTest {
         System.out.println("analizarCierre");
         String patron="close\\s+([A-Za-z0-9._$#]+)";
         String ident="c1";               
-        String programa="/Users/juancarlos/tmp/archivo.sql";
+        String programa="/Users/juancarlos/tmp/findcourse.sql";
         Analisis instance = new Analisis();
         int res=instance.analizarCierre(ident, patron,programa);
         assertEquals(14,res);

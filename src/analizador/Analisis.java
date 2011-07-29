@@ -62,7 +62,7 @@ public class Analisis {
         Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
-        ArrayList<String> archivosFiltrados = new ArrayList<String>();
+        ArrayList<Nodo> archivosFiltrados = new ArrayList<Nodo>();
         ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
         log.info("Tamaño lista " + lista.size());
 
@@ -72,15 +72,17 @@ public class Analisis {
             log.info("Filtrando Archivos SQL");
 
             if (ext.equals("sql")) {
-                archivosFiltrados.add(lista.get(x).getPrograma());
+                archivosFiltrados.add(lista.get(x));
+            }
+        }
+        for (int x = 0; x < archivosFiltrados.size(); x++) {
                 log.info("Nombre archivo " + lista.get(x).getPrograma());
-                tmp = analizarNodo(lista.get(x));
+                tmp = analizarNodo(archivosFiltrados.get(x));
                 mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
                 mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
                 mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
-            }
-
         }
+
         generarXML(mapa, archivosFiltrados);
 
     }
@@ -268,7 +270,7 @@ public class Analisis {
 
     }
 
-    public boolean generarXML(Map mapa, ArrayList<String> nombreArchivo) {
+    public boolean generarXML(Map mapa, ArrayList<Nodo> nombreArchivo) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -286,7 +288,7 @@ public class Analisis {
                 Text text = document.createTextNode(usuario);*/
 
                 Element ubicacionElem = document.createElement("nombreArchivo");
-                Text textUb = document.createTextNode(nombreArchivo.get(x));
+                Text textUb = document.createTextNode(nombreArchivo.get(x).getPrograma());
 
                 /* Element cantDefElem = document.createElement("cantidadDefectos");
                 Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));*/

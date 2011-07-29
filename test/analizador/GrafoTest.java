@@ -4,6 +4,7 @@
  */
 package analizador;
 
+import java.util.LinkedList;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
  * @author juancarlos
  */
 public class GrafoTest {
-    
+
     public GrafoTest() {
     }
 
@@ -28,11 +29,11 @@ public class GrafoTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -43,11 +44,22 @@ public class GrafoTest {
     @Test
     public void testCrearGrafo() {
         System.out.println("crearGrafo");
-        String[] archivos = {"archivo.sql", "archivo2.sql"};
-        String ubicacionArchivos="/Users/juancarlos/tmp/";
+        String[] archivos = {"archivo2.sql", "findcourse.sql"};
+        String ubicacionArchivos = "/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
-        ArrayList result = instance.crearGrafo(ubicacionArchivos,archivos);
-        assertEquals(2,result.size());
-                
+        ArrayList<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos);
+        LinkedList<Nodo> llamadas1 = result.get(0).getLlamadas();
+        LinkedList<Nodo> llamadas2 = result.get(1).getLlamadas();
+
+        assertEquals(2, result.size());
+        assertEquals(1, llamadas1.size());
+        assertEquals(1, llamadas2.size());
+        for (int x = 0; x < llamadas1.size(); x++) {
+            System.out.println(llamadas1.get(x).getPrograma());
+        }
+        for (int x = 0; x < llamadas2.size(); x++) {
+            System.out.println(llamadas2.get(x).getPrograma());
+        }
+
     }
 }
