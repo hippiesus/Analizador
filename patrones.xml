@@ -1,27 +1,20 @@
 <patrones>
+			<patron>
+		<identificador>2</identificador>
+		<nombre>return</nombre>
+		<clasificacion>bajo</clasificacion>
+		<descripcion>open</descripcion>
+	</patron>
 	<patron>
 		<identificador>1</identificador>
 		<nombre>open identificador:close identificador</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
-
-	<patron>
+		<patron>
 		<identificador>2</identificador>
-		<nombre>if (identificador) then:end if</nombre>
-		<clasificacion>medio</clasificacion>
-		<descripcion>open</descripcion>
-	</patron>
-	<patron>
-		<identificador>3</identificador>
 		<nombre>begin</nombre>
-		<clasificacion>bajo</clasificacion>
-		<descripcion>open</descripcion>
-	</patron>
-	<patron>
-		<identificador>4</identificador>
-		<nombre>return</nombre>
-		<clasificacion>bajo</clasificacion>
+		<clasificacion>medio</clasificacion>
 		<descripcion>open</descripcion>
 	</patron>
 

@@ -45,7 +45,7 @@ public class Analisis {
     private final static Logger log = Logger.getLogger(Analisis.class);
     final String delimitador = ":";
     final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
-    final String espacioBlanco = "\\\\s+";
+    final String espacioBlanco = "\\\\s*";
     final String parentesisApertura = "\\\\(";
     final String parentesisCierre = "\\\\)";
     final String critico = "critico";
@@ -76,11 +76,11 @@ public class Analisis {
             }
         }
         for (int x = 0; x < archivosFiltrados.size(); x++) {
-                log.info("Nombre archivo " + lista.get(x).getPrograma());
-                tmp = analizarNodo(archivosFiltrados.get(x));
-                mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
-                mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
-                mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
+            log.info("Nombre archivo " + lista.get(x).getPrograma());
+            tmp = analizarNodo(archivosFiltrados.get(x));
+            mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
+            mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
+            mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
         }
 
         generarXML(mapa, archivosFiltrados);
@@ -103,6 +103,7 @@ public class Analisis {
         int numLineaFinal = -1;
         String inicio = null;
         String cierre = null;
+        boolean group = false;
 
         try {
 
@@ -125,15 +126,19 @@ public class Analisis {
                 }
                 log.info("Patron " + patron);
 
-                if (patron.contains("identificador")) {
-                    log.info("Patron con identificador");
-                    patron = patron.replaceAll("identificador", identificadorOracle);
-                }
                 if (patron.contains(delimitador)) {
                     log.info("Patron con delimitador");
                     int delimitadorPosicion = patron.indexOf(delimitador);
                     inicio = patron.substring(0, delimitadorPosicion);
                     cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
+                }
+                if (inicio != null) {
+                    if (inicio.contains("identificador")) {
+                        log.info("Patron con identificador");
+                        inicio = inicio.replaceAll("identificador", identificadorOracle);
+                        log.info(inicio);
+                        group = true;
+                    }
                 }
 
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
@@ -145,10 +150,14 @@ public class Analisis {
                         Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
                         Matcher m = p.matcher(linea);
 
-                        if (m.find()) {
-                            String ident = m.group(1);
+                        if (m.find() && group) {
+                            String ident = null;
+                            ident = m.group(1);
                             numLineaInicio = numLinea;
                             numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                        } else if (m.find()) {
+                            numLineaInicio = numLinea;
+                            numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
                         }
                         log.info("Linea inicio " + numLineaInicio);
                         log.info("Linea final " + numLineaFinal);
@@ -214,12 +223,14 @@ public class Analisis {
 
     public int analizarCierre(String identificador, String patron, String programa) {
 
-        Map<String, Integer> mapa = new HashMap<String, Integer>();
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
         ArrayList<PatronDefecto> pd = obtenerPatrones();
         int numLinea = -1;
+
+        String linea;
+        int nLinea = 0;
 
         try {
 
@@ -227,30 +238,23 @@ public class Analisis {
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
-            String linea;
-            int nLinea = 0;
 
             log.info("analizarCierre");
 
-            if (identificador != null) {
-                log.info("Patron " + patron);
-                patron = patron.replace("identificador", identificador);
-            } else {
-
-                log.info("Patron " + patron);
-                patron = patron;
+            if (identificador != null || "".equals(identificador)) {
+                patron = patron.replaceAll("identificador", identificador);
+                log.info("Patron Cierre Identificador" + patron);
             }
-            for (int x = 0; x < pd.size(); x++) { // para todos los patrones
-                while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                    nLinea++;
+            while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                    Pattern p = Pattern.compile(patron);
-                    Matcher m = p.matcher(linea);
-                    log.info("Patron reemplazado " + patron);
-                    if (m.find()) {
-                        numLinea = nLinea;
-                    }
+                nLinea++;
+
+                Pattern p = Pattern.compile(patron);
+                Matcher m = p.matcher(linea);
+                log.info("Patron reemplazado Cierre " + patron);
+                if (m.find()) {
+                    numLinea = nLinea;
                 }
             }
         } catch (IOException e) {

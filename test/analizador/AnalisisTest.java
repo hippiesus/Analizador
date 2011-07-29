@@ -92,7 +92,7 @@ public class AnalisisTest {
     public void testGenerarXML() {
         System.out.println("generarXML");
         Analisis instance = new Analisis();
-        ArrayList<String> lista = new ArrayList<String>();
+        ArrayList<Nodo> lista = new ArrayList<Nodo>();
         HashMap<String,Integer> mapa= new HashMap<String, Integer>(); 
         boolean exp=instance.generarXML(mapa, lista);
         assertTrue(exp);
