@@ -5,6 +5,7 @@
 package analizador;
 
 import java.util.LinkedList;
+import java.util.List;
 /**
  *
  * @author juancarlos
@@ -12,7 +13,7 @@ import java.util.LinkedList;
 public class Nodo {
     private  String programa;
     
-    private LinkedList<Nodo> llamadas= new LinkedList<Nodo>();
+    private List<Nodo> llamadas= new LinkedList<Nodo>();
     /**
      * @return the programa
      */
@@ -30,14 +31,14 @@ public class Nodo {
     /**
      * @return the llamadas
      */
-    public LinkedList<Nodo> getLlamadas() {
+    public List<Nodo> getLlamadas() {
         return llamadas;
     }
 
     /**
      * @param llamadas the llamadas to set
      */
-    public void setLlamadas(LinkedList<Nodo> llamadas) {
+    public void setLlamadas(List<Nodo> llamadas) {
         this.llamadas = llamadas;
     }
     

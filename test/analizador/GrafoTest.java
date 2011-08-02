@@ -4,6 +4,7 @@
  */
 package analizador;
 
+import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import org.junit.After;
@@ -47,9 +48,9 @@ public class GrafoTest {
         String[] archivos = {"archivo2.sql", "findcourse.sql"};
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
-        ArrayList<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos);
-        LinkedList<Nodo> llamadas1 = result.get(0).getLlamadas();
-        LinkedList<Nodo> llamadas2 = result.get(1).getLlamadas();
+        List<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos);
+        List<Nodo> llamadas1 = result.get(0).getLlamadas();
+        List<Nodo> llamadas2 = result.get(1).getLlamadas();
 
         assertEquals(2, result.size());
         assertEquals(1, llamadas1.size());

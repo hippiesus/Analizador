@@ -5,6 +5,7 @@
 package analizador;
 
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class AnalisisTest {
     public void testObtenerPatrones() {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
-        ArrayList result = instance.obtenerPatrones();
+        List result = instance.obtenerPatrones();
         assertEquals(4, result.size());
     }
     

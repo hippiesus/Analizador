@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,8 +63,8 @@ public class Analisis {
         Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
-        ArrayList<Nodo> archivosFiltrados = new ArrayList<Nodo>();
-        ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
+        List<Nodo> archivosFiltrados = new ArrayList<Nodo>();
+        List<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
         log.info("Tamaño lista " + lista.size());
 
         for (int x = 0; x < lista.size(); x++) {
@@ -93,7 +94,7 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        ArrayList<PatronDefecto> pd = obtenerPatrones();
+        List<PatronDefecto> pd = obtenerPatrones();
         String linea;
         int numLinea = 0;
         int cantidadCritico = 0;
@@ -140,7 +141,7 @@ public class Analisis {
                         group = true;
                     }
                 }
-
+                numLinea=0;
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
@@ -226,7 +227,7 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        ArrayList<PatronDefecto> pd = obtenerPatrones();
+        List<PatronDefecto> pd = obtenerPatrones();
         int numLinea = -1;
 
         String linea;
@@ -274,7 +275,7 @@ public class Analisis {
 
     }
 
-    public boolean generarXML(Map mapa, ArrayList<Nodo> nombreArchivo) {
+    public boolean generarXML(Map mapa, List<Nodo> nombreArchivo) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -350,9 +351,9 @@ public class Analisis {
         }
     }
 
-    public ArrayList<PatronDefecto> obtenerPatrones() {
+    public List<PatronDefecto> obtenerPatrones() {
 
-        ArrayList<PatronDefecto> p = new ArrayList<PatronDefecto>();
+        List<PatronDefecto> p = new ArrayList<PatronDefecto>();
         try {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();

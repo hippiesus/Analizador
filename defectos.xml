@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <estadisticas>
 <estadistica>
-<fecha>Fri Jul 29 00:06:32 CLT 2011</fecha>
+<fecha>Tue Aug 02 18:20:42 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo2.sql</nombreArchivo>
-<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosBajo>1</cantidadDefectosBajo>
 <cantidadDefectosMedio>0</cantidadDefectosMedio>
-<cantidadDefectosCritico>0</cantidadDefectosCritico>
+<cantidadDefectosCritico>1</cantidadDefectosCritico>
 </estadistica>
 <estadistica>
-<fecha>Fri Jul 29 00:06:32 CLT 2011</fecha>
+<fecha>Tue Aug 02 18:20:42 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/findcourse.sql</nombreArchivo>
 <cantidadDefectosBajo>2</cantidadDefectosBajo>
 <cantidadDefectosMedio>3</cantidadDefectosMedio>
-<cantidadDefectosCritico>3</cantidadDefectosCritico>
+<cantidadDefectosCritico>1</cantidadDefectosCritico>
 </estadistica>
 </estadisticas>

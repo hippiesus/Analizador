@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,15 +29,15 @@ public class Grafo {
 
     }
 
-    public ArrayList<Nodo> crearGrafo(String ubicacionArchivos, String[] archivos) {
+    public List<Nodo> crearGrafo(String ubicacionArchivos, String[] archivos) {
         /*analizara el nombre de un archivo y lo buscara dentro de su archivo y de otros */
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
         String linea;
         int numLinea = 0;
-        LinkedList<Nodo> llamadas;//= new LinkedList<Nodo>();
-        ArrayList<Nodo> lista = new ArrayList<Nodo>();
+        List<Nodo> llamadas;//= new LinkedList<Nodo>();
+        List<Nodo> lista = new ArrayList<Nodo>();
 
         try {
             for (int i = 0; i < archivos.length; i++) {// para todos los archivos
@@ -60,7 +61,7 @@ public class Grafo {
                         if (m.find()) {
                          //   System.out.println("encontro " + p.toString() + " en " + ubicacionArchivos + archivos[x]);
                             String programa = ubicacionArchivos + archivos[x];
-                            if (llamadas.size() != 0) {
+                            if (!llamadas.isEmpty()) {
                                 for (int j = 0; j < llamadas.size(); j++) {
                                   //  System.out.println("");
                                     if (!programa.equals(llamadas.get(j).getPrograma())) {
