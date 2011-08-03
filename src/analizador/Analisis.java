@@ -44,14 +44,16 @@ import org.xml.sax.SAXException;
 public class Analisis {
 
     private final static Logger log = Logger.getLogger(Analisis.class);
-    final String delimitador = ":";
+    final String delimitador = "::";
     final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
+    final String identificadorAlter = "([A-Za-z0-9._\\$#]+)";
     final String espacioBlanco = "\\\\s*";
     final String parentesisApertura = "\\\\(";
     final String parentesisCierre = "\\\\)";
     final String critico = "critico";
     final String medio = "medio";
     final String bajo = "bajo";
+    final String operador = "[\\*\\+\\-\\/]";
 
     public Analisis() {
         BasicConfigurator.configure();
@@ -135,13 +137,24 @@ public class Analisis {
                     patron = patron.replaceAll("\\(", parentesisApertura);
                     patron = patron.replaceAll("\\)", parentesisCierre);
                 }
-                log.info("Patron " + patron);
+
+
+                if (patron.contains("operador")) {
+                    log.info("Patron con operador");
+                    patron = patron.replaceAll("operador", operador);
+                    log.info(patron);
+                }
+                if (patron.contains("identificadorAlter")) {
+                    log.info("Patron con IdentificadorAlternativo");
+                    patron = patron.replaceAll("identificadorAlter", identificadorAlter);
+                    log.info(patron);
+                }
 
                 if (patron.contains(delimitador)) {
                     log.info("Patron con delimitador");
                     int delimitadorPosicion = patron.indexOf(delimitador);
                     inicio = patron.substring(0, delimitadorPosicion);
-                    cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
+                    cierre = patron.substring(patron.indexOf(delimitador) + delimitador.length(), patron.length());
                 }
                 if (inicio != null) {
                     if (inicio.contains("identificador")) {
@@ -157,6 +170,7 @@ public class Analisis {
                     log.info(patron);
                     group = true;
                 }
+
                 numLinea = 0;
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
@@ -419,6 +433,14 @@ public class Analisis {
                     NodeList descripcionList = descripcionElement.getChildNodes();
                     if (((Node) descripcionList.item(0)) != null) {
                         pd.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
+                    }
+                    // ----
+                    NodeList correccion = pa.getElementsByTagName("correccion");
+                    Element correccionElement = (Element) descripcion.item(0);
+
+                    NodeList correccionList = correccionElement.getChildNodes();
+                    if (((Node) correccionList.item(0)) != null) {
+                        pd.setCorreccion(((Node) correccionList.item(0)).getNodeValue().trim());
                     }
 
                     p.add(pd);

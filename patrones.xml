@@ -1,22 +1,26 @@
 <patrones>
 	<patron>
 		<identificador>2</identificador>
-		<nombre>identificador number</nombre>
-		<clasificacion>medio</clasificacion>
+		<nombre>identificador number:: identificador := identificador1 operador identificador1</nombre>
+		<clasificacion>bajo</clasificacion>
 		<descripcion>open</descripcion>
+		<correccion>open</correccion>
 	</patron>
+	
 	<patron>
 		<identificador>1</identificador>
-		<nombre>open identificador:close identificador</nombre>
+		<nombre>open identificador::close identificador</nombre>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
+		<correccion>open</correccion>
 	</patron>
 
 	<patron>
 		<identificador>4</identificador>
-		<nombre>if (identificador) then:end if</nombre>
+		<nombre>if (identificador) then::end if</nombre>
 		<clasificacion>medio</clasificacion>
 		<descripcion>open</descripcion>
+		<correccion>open</correccion>
 	</patron>
 
 </patrones>

@@ -13,7 +13,7 @@ public class PatronDefecto {
     private String nombre;
     private String clasificacion;
     private String descripcion;
-
+    private String correccion;
   
     
     /**
@@ -70,6 +70,20 @@ public class PatronDefecto {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the correccion
+     */
+    public String getCorreccion() {
+        return correccion;
+    }
+
+    /**
+     * @param correccion the correccion to set
+     */
+    public void setCorreccion(String correccion) {
+        this.correccion = correccion;
     }
     
     
