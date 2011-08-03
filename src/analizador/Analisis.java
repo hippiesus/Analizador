@@ -151,6 +151,12 @@ public class Analisis {
                         group = true;
                     }
                 }
+                if (patron.contains("identificador")) {
+                    log.info("Patron con identificador");
+                    patron = patron.replaceAll("identificador", identificadorOracle);
+                    log.info(patron);
+                    group = true;
+                }
                 numLinea = 0;
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 

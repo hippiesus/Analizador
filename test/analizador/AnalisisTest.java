@@ -44,7 +44,7 @@ public class AnalisisTest {
     /**
      * Test of detectarDefectos method, of class Analisis.
      */
-    //@Test
+    @Test
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
@@ -68,8 +68,8 @@ public class AnalisisTest {
         int medio=mapa.get("medio");
         int bajo=mapa.get("bajo");
         assertEquals(1,critico);
-        assertEquals(4,medio);
-        assertEquals(2,bajo);
+        assertEquals(7,medio);
+        assertEquals(0,bajo);
         
         
     }
@@ -106,7 +106,7 @@ public class AnalisisTest {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
         List result = instance.obtenerPatrones();
-        assertEquals(4, result.size());
+        assertEquals(3, result.size());
     }
     
 }
