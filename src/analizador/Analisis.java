@@ -76,12 +76,22 @@ public class Analisis {
                 archivosFiltrados.add(lista.get(x));
             }
         }
+        log.info("Tamaño lista filtrada " + archivosFiltrados.size());
         for (int x = 0; x < archivosFiltrados.size(); x++) {
-            log.info("Nombre archivo " + lista.get(x).getPrograma());
+            log.info("Nombre archivo " + archivosFiltrados.get(x).getPrograma());
             tmp = analizarNodo(archivosFiltrados.get(x));
             mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
             mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
             mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
+            log.info("Tamaño Lista Llamadas " + archivosFiltrados.get(x).getLlamadas().size());
+            for (int j = 0; j < archivosFiltrados.get(x).getLlamadas().size(); j++) {
+                log.info("Nombre de LLamada " + archivosFiltrados.get(x).getLlamadas().get(j).getPrograma());
+                tmp = analizarNodo(archivosFiltrados.get(x).getLlamadas().get(j));
+                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + critico, tmp.get(critico));
+                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + medio, tmp.get(medio));
+                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + bajo, tmp.get(bajo));
+            }
+
         }
 
         generarXML(mapa, archivosFiltrados);
@@ -104,7 +114,7 @@ public class Analisis {
         int numLineaFinal = -1;
         String inicio = null;
         String cierre = null;
-        boolean group = false;
+        boolean group;
 
         try {
 
@@ -114,7 +124,7 @@ public class Analisis {
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
                 fr = new FileReader(archivo);
                 br = new BufferedReader(fr);
-
+                group = false;
                 String patron = pd.get(x).getNombre();
                 if (patron.contains(" ")) {
                     log.info("Reemplazando espacio en blanco");
@@ -141,7 +151,7 @@ public class Analisis {
                         group = true;
                     }
                 }
-                numLinea=0;
+                numLinea = 0;
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     numLinea++;
@@ -150,7 +160,6 @@ public class Analisis {
                         log.info("Patron con delimitador");
                         Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
                         Matcher m = p.matcher(linea);
-
                         if (m.find() && group) {
                             String ident = null;
                             ident = m.group(1);
@@ -227,7 +236,6 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        List<PatronDefecto> pd = obtenerPatrones();
         int numLinea = -1;
 
         String linea;
@@ -244,7 +252,7 @@ public class Analisis {
 
             if (identificador != null || "".equals(identificador)) {
                 patron = patron.replaceAll("identificador", identificador);
-                log.info("Patron Cierre Identificador" + patron);
+                log.info("Patron Cierre Identificador " + patron);
             }
 
             while ((linea = br.readLine()) != null) { // para cada linea del archivo

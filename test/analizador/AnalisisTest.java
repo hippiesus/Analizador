@@ -44,7 +44,7 @@ public class AnalisisTest {
     /**
      * Test of detectarDefectos method, of class Analisis.
      */
-    @Test
+    //@Test
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
@@ -67,9 +67,9 @@ public class AnalisisTest {
         int critico=mapa.get("critico");
         int medio=mapa.get("medio");
         int bajo=mapa.get("bajo");
-        assertEquals(3,critico);
-        assertEquals(1,medio);
-        assertEquals(4,bajo);
+        assertEquals(1,critico);
+        assertEquals(4,medio);
+        assertEquals(2,bajo);
         
         
     }
@@ -77,12 +77,12 @@ public class AnalisisTest {
     @Test
     public void testAnalizarCierre() {
         System.out.println("analizarCierre");
-        String patron="close\\s+([A-Za-z0-9._$#]+)";
+        String patron="close (identificador)";
         String ident="c1";               
         String programa="/Users/juancarlos/tmp/findcourse.sql";
         Analisis instance = new Analisis();
         int res=instance.analizarCierre(ident, patron,programa);
-        assertEquals(14,res);
+        assertEquals(16,res);
         
     }
 

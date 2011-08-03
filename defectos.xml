@@ -1,17 +1,73 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <estadisticas>
 <estadistica>
-<fecha>Tue Aug 02 18:20:42 CLT 2011</fecha>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo2.sql</nombreArchivo>
-<cantidadDefectosBajo>1</cantidadDefectosBajo>
-<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>1</cantidadDefectosMedio>
 <cantidadDefectosCritico>1</cantidadDefectosCritico>
 </estadistica>
 <estadistica>
-<fecha>Tue Aug 02 18:20:42 CLT 2011</fecha>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/Claudio_Latorre.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/ClaudioGalleguillos.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/Eliana_Jara.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/findcourse.sql</nombreArchivo>
-<cantidadDefectosBajo>2</cantidadDefectosBajo>
-<cantidadDefectosMedio>3</cantidadDefectosMedio>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>1</cantidadDefectosMedio>
 <cantidadDefectosCritico>1</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/MMontecinos.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/RodrigoUgalde.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/SebastianCaceres.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/T3-cristobalcuevas.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Tue Aug 02 21:49:10 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/trabajo recuperativo.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
 </estadistica>
 </estadisticas>
