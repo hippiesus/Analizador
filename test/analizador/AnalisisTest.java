@@ -68,7 +68,7 @@ public class AnalisisTest {
         int medio=mapa.get("medio");
         int bajo=mapa.get("bajo");
         assertEquals(1,critico);
-        assertEquals(7,medio);
+        assertEquals(1,medio);
         assertEquals(0,bajo);
         
         

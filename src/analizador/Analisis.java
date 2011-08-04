@@ -204,8 +204,6 @@ public class Analisis {
                                 cantidadBajo++;
                             }
                             lineas.add(numLinea);
-                            System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
-                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                             numLineaInicio = -1;
                             numLineaFinal = -1;
                         }
@@ -225,17 +223,13 @@ public class Analisis {
                                 cantidadBajo++;
                             }
                             lineas.add(numLinea);
-                            System.out.println("DEFECTO ENCONTRADO");
-                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
+
                         }
 
                     }
 
                 }
-                System.out.println("PYTHON" + nodo.getPrograma() + pd.get(x).getNombre());
                 defectos.put(nodo.getPrograma() + pd.get(x).getNombre(), lineas);
-                System.out.println("PYTHON" + nodo.getPrograma() + pd.get(x).getNombre());
-                System.out.println("PYTHON" + defectos.get(nodo.getPrograma() + pd.get(x).getNombre()));
             }
 
             mapa.put(critico, cantidadCritico);
@@ -326,14 +320,9 @@ public class Analisis {
                 Text textFecha = document.createTextNode(new Date().toString());
 
 
-                /* Element usuarioElem = document.createElement("usuario");
-                Text text = document.createTextNode(usuario);*/
-
                 Element ubicacionElem = document.createElement("nombreArchivo");
                 Text textUb = document.createTextNode(nombreArchivo.get(x).getPrograma());
 
-                /* Element cantDefElem = document.createElement("cantidadDefectos");
-                Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));*/
 
                 Element cantDefBElem = document.createElement("cantidadDefectosBajo");
                 Text textCdb = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + bajo)));
@@ -356,17 +345,13 @@ public class Analisis {
                 document.getDocumentElement().appendChild(raiz);
 
                 raiz.appendChild(fechaElem);
-                //   raiz.appendChild(usuarioElem);
                 raiz.appendChild(ubicacionElem);
-                //   raiz.appendChild(cantDefElem);
                 raiz.appendChild(cantDefBElem);
                 raiz.appendChild(cantDefMElem);
                 raiz.appendChild(cantDefCElem);
 
                 fechaElem.appendChild(textFecha);
-                //   usuarioElem.appendChild(text);
                 ubicacionElem.appendChild(textUb);
-                //   cantDefElem.appendChild(textCd);
                 cantDefBElem.appendChild(textCdb);
                 cantDefMElem.appendChild(textCdm);
                 cantDefCElem.appendChild(textCdc);

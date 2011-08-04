@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * @author juancarlos
  */
 public class NodoTest {
-    
+
     public NodoTest() {
     }
 
@@ -27,11 +27,11 @@ public class NodoTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -46,8 +46,7 @@ public class NodoTest {
         String expResult = "";
         String result = instance.getPrograma();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -59,7 +58,6 @@ public class NodoTest {
         String programa = "";
         Nodo instance = new Nodo();
         instance.setPrograma(programa);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 }
