@@ -54,9 +54,12 @@ public class Analisis {
     final String medio = "medio";
     final String bajo = "bajo";
     final String operador = "[\\*\\+\\-\\/]";
+    Map<String, List<Integer>> defectos;
 
     public Analisis() {
         BasicConfigurator.configure();
+        defectos = new HashMap<String, List<Integer>>();
+
 
     }
 
@@ -124,10 +127,11 @@ public class Analisis {
 
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
+                List<Integer> lineas = new ArrayList<Integer>();
                 fr = new FileReader(archivo);
                 br = new BufferedReader(fr);
                 group = false;
-                String patron = pd.get(x).getNombre();
+                String patron = pd.get(x).getExpresion();
                 if (patron.contains(" ")) {
                     log.info("Reemplazando espacio en blanco");
                     patron = patron.replaceAll(" ", espacioBlanco);
@@ -199,6 +203,7 @@ public class Analisis {
                             } else {
                                 cantidadBajo++;
                             }
+                            lineas.add(numLinea);
                             System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
                             System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                             numLineaInicio = -1;
@@ -219,6 +224,7 @@ public class Analisis {
                             } else {
                                 cantidadBajo++;
                             }
+                            lineas.add(numLinea);
                             System.out.println("DEFECTO ENCONTRADO");
                             System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
                         }
@@ -226,7 +232,10 @@ public class Analisis {
                     }
 
                 }
-
+                System.out.println("PYTHON" + nodo.getPrograma() + pd.get(x).getNombre());
+                defectos.put(nodo.getPrograma() + pd.get(x).getNombre(), lineas);
+                System.out.println("PYTHON" + nodo.getPrograma() + pd.get(x).getNombre());
+                System.out.println("PYTHON" + defectos.get(nodo.getPrograma() + pd.get(x).getNombre()));
             }
 
             mapa.put(critico, cantidadCritico);
@@ -335,6 +344,15 @@ public class Analisis {
                 Element cantDefCElem = document.createElement("cantidadDefectosCritico");
                 Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + critico)));
 
+                List<PatronDefecto> pd = obtenerPatrones();
+                for (int j = 0; j < pd.size(); j++) {
+                    Element e = document.createElement(pd.get(j).getNombre());
+                    Text t = document.createTextNode(defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()).toString());
+                    raiz.appendChild(e);
+                    e.appendChild(t);
+
+                }
+
                 document.getDocumentElement().appendChild(raiz);
 
                 raiz.appendChild(fechaElem);
@@ -415,6 +433,15 @@ public class Analisis {
                     NodeList nombreList = nombreElement.getChildNodes();
                     if (((Node) nombreList.item(0)) != null) {
                         pd.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
+
+                    }
+                    // -------
+                    NodeList expresion = pa.getElementsByTagName("expresion");
+                    Element expresionElement = (Element) expresion.item(0);
+
+                    NodeList expresionList = expresionElement.getChildNodes();
+                    if (((Node) expresionList.item(0)) != null) {
+                        pd.setExpresion(((Node) expresionList.item(0)).getNodeValue().trim());
 
                     }
                     // ----

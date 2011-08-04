@@ -1,7 +1,8 @@
 <patrones>
 	<patron>
 		<identificador>2</identificador>
-		<nombre>identificador number:: identificador := identificador1 operador identificador1</nombre>
+		<nombre>pls_integer</nombre>
+		<expresion>identificador number:: identificador := identificador1 operador identificador1</expresion>
 		<clasificacion>bajo</clasificacion>
 		<descripcion>open</descripcion>
 		<correccion>open</correccion>
@@ -9,7 +10,8 @@
 	
 	<patron>
 		<identificador>1</identificador>
-		<nombre>open identificador::close identificador</nombre>
+		<nombre>cierre_cursor</nombre>
+		<expresion>open identificador::close identificador</expresion>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
 		<correccion>open</correccion>
@@ -17,7 +19,8 @@
 
 	<patron>
 		<identificador>4</identificador>
-		<nombre>if (identificador) then::end if</nombre>
+		<nombre>cierre_if</nombre>
+		<expresion>if (identificador) then::end if</expresion>
 		<clasificacion>medio</clasificacion>
 		<descripcion>open</descripcion>
 		<correccion>open</correccion>
