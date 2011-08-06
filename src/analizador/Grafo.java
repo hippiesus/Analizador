@@ -42,44 +42,46 @@ public class Grafo {
         try {
             for (int i = 0; i < archivos.length; i++) {// para todos los archivos
                 String nombreArchivo = ubicacionArchivos + archivos[i];
-              //  System.out.println("funcion a buscar" + nombreArchivo);
+                //  System.out.println("funcion a buscar" + nombreArchivo);
                 String nombreFuncion = archivos[i].substring(0, archivos[i].length() - 4);
                 llamadas = new LinkedList<Nodo>();
 
                 for (int x = 0; x < archivos.length; x++) { // con todos los otros , incluyendose
                     archivo = new File(ubicacionArchivos + archivos[x]);
 
-                    fr = new FileReader(archivo);
-                    br = new BufferedReader(fr);
+                    if (archivo.isFile()) {
+                        fr = new FileReader(archivo);
+                        br = new BufferedReader(fr);
 
-                    while ((linea = br.readLine()) != null) { // para cada linea del archivo
+                        while ((linea = br.readLine()) != null) { // para cada linea del archivo
 //                        System.out.println(linea);
-                        numLinea++;
+                            numLinea++;
 
-                        Pattern p = Pattern.compile(nombreFuncion, Pattern.CASE_INSENSITIVE);
-                        Matcher m = p.matcher(linea);
-                        if (m.find()) {
-                         //   System.out.println("encontro " + p.toString() + " en " + ubicacionArchivos + archivos[x]);
-                            String programa = ubicacionArchivos + archivos[x];
-                            if (!llamadas.isEmpty()) {
-                                for (int j = 0; j < llamadas.size(); j++) {
-                                  //  System.out.println("");
-                                    if (!programa.equals(llamadas.get(j).getPrograma())) {
-                                   //     System.out.println("aaaaaaaaa");
-                                        Nodo n = new Nodo();
-                                        n.setPrograma(programa);
-                                        llamadas.add(n);
+                            Pattern p = Pattern.compile(nombreFuncion, Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            if (m.find()) {
+                                //   System.out.println("encontro " + p.toString() + " en " + ubicacionArchivos + archivos[x]);
+                                String programa = ubicacionArchivos + archivos[x];
+                                if (!llamadas.isEmpty()) {
+                                    for (int j = 0; j < llamadas.size(); j++) {
+                                        //  System.out.println("");
+                                        if (!programa.equals(llamadas.get(j).getPrograma())) {
+                                            //     System.out.println("aaaaaaaaa");
+                                            Nodo n = new Nodo();
+                                            n.setPrograma(programa);
+                                            llamadas.add(n);
+                                        }
                                     }
-                                }
-                            } else {
+                                } else {
 
-                                Nodo n = new Nodo();
-                                n.setPrograma(programa);
-                                llamadas.add(n);
+                                    Nodo n = new Nodo();
+                                    n.setPrograma(programa);
+                                    llamadas.add(n);
+                                }
+
                             }
 
                         }
-
                     }
                 }
                 //System.out.println("size" + lista.size());

@@ -120,6 +120,7 @@ public class Analisis {
         String inicio = null;
         String cierre = null;
         boolean group;
+        boolean comentario = false;
 
         try {
 
@@ -128,108 +129,128 @@ public class Analisis {
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
                 List<Integer> lineas = new ArrayList<Integer>();
-                fr = new FileReader(archivo);
-                br = new BufferedReader(fr);
-                group = false;
-                String patron = pd.get(x).getExpresion();
-                if (patron.contains(" ")) {
-                    log.info("Reemplazando espacio en blanco");
-                    patron = patron.replaceAll(" ", espacioBlanco);
-                }
-                if (patron.contains("(") && patron.contains(")")) {
-                    log.info("Reemplazando ( )");
-                    patron = patron.replaceAll("\\(", parentesisApertura);
-                    patron = patron.replaceAll("\\)", parentesisCierre);
-                }
-
-
-                if (patron.contains("operador")) {
-                    log.info("Patron con operador");
-                    patron = patron.replaceAll("operador", operador);
-                    log.info(patron);
-                }
-                if (patron.contains("identificadorAlter")) {
-                    log.info("Patron con IdentificadorAlternativo");
-                    patron = patron.replaceAll("identificadorAlter", identificadorAlter);
-                    log.info(patron);
-                }
-
-                if (patron.contains(delimitador)) {
-                    log.info("Patron con delimitador");
-                    int delimitadorPosicion = patron.indexOf(delimitador);
-                    inicio = patron.substring(0, delimitadorPosicion);
-                    cierre = patron.substring(patron.indexOf(delimitador) + delimitador.length(), patron.length());
-                }
-                if (inicio != null) {
-                    if (inicio.contains("identificador")) {
-                        log.info("Patron con identificador");
-                        inicio = inicio.replaceAll("identificador", identificadorOracle);
-                        log.info(inicio);
-                        group = true;
+                if (archivo.isFile()) {
+                    fr = new FileReader(archivo);
+                    br = new BufferedReader(fr);
+                    group = false;
+                    String patron = pd.get(x).getExpresion();
+                    if (patron.contains(" ")) {
+                        log.info("Reemplazando espacio en blanco");
+                        patron = patron.replaceAll(" ", espacioBlanco);
                     }
-                }
-                if (patron.contains("identificador")) {
-                    log.info("Patron con identificador");
-                    patron = patron.replaceAll("identificador", identificadorOracle);
-                    log.info(patron);
-                    group = true;
-                }
+                    if (patron.contains("(") && patron.contains(")")) {
+                        log.info("Reemplazando ( )");
+                        patron = patron.replaceAll("\\(", parentesisApertura);
+                        patron = patron.replaceAll("\\)", parentesisCierre);
+                    }
 
-                numLinea = 0;
-                while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                    numLinea++;
+                    if (patron.contains("operador")) {
+                        log.info("Patron con operador");
+                        patron = patron.replaceAll("operador", operador);
+                        log.info(patron);
+                    }
+                    if (patron.contains("identificadorAlter")) {
+                        log.info("Patron con IdentificadorAlternativo");
+                        patron = patron.replaceAll("identificadorAlter", identificadorAlter);
+                        log.info(patron);
+                    }
 
                     if (patron.contains(delimitador)) {
                         log.info("Patron con delimitador");
-                        Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
-                        Matcher m = p.matcher(linea);
-                        if (m.find() && group) {
-                            String ident = null;
-                            ident = m.group(1);
-                            numLineaInicio = numLinea;
-                            numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
-                        } else if (m.find()) {
-                            numLineaInicio = numLinea;
-                            numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
+                        int delimitadorPosicion = patron.indexOf(delimitador);
+                        inicio = patron.substring(0, delimitadorPosicion);
+                        cierre = patron.substring(patron.indexOf(delimitador) + delimitador.length(), patron.length());
+                    }
+                    if (inicio != null) {
+                        if (inicio.contains("identificador")) {
+                            log.info("Patron con identificador");
+                            inicio = inicio.replaceAll("identificador", identificadorOracle);
+                            log.info(inicio);
+                            group = true;
                         }
-                        log.info("Linea inicio " + numLineaInicio);
-                        log.info("Linea final " + numLineaFinal);
-                        if (numLineaInicio > numLineaFinal) {
-                            if (pd.get(x).getClasificacion().equals(critico)) {
-                                cantidadCritico++;
-                            } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                cantidadMedio++;
-                            } else {
-                                cantidadBajo++;
-                            }
-                            lineas.add(numLinea);
-                            numLineaInicio = -1;
-                            numLineaFinal = -1;
+                    }
+                    if (patron.contains("identificador")) {
+                        log.info("Patron con identificador");
+                        patron = patron.replaceAll("identificador", identificadorOracle);
+                        log.info(patron);
+                        group = true;
+                    }
+
+                    numLinea = 0;
+
+                    while ((linea = br.readLine()) != null) { // para cada linea del archivo
+
+                        numLinea++;
+
+                        if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
+                            System.out.println("SIMPLE"+linea);
+                            continue;
+                        }
+                        if (linea.contains("/*")) {  /* validacion comentarios multiples*/
+                            comentario = true;           
+                        }
+                        if (linea.contains("*/")) {                     
+                            comentario = false;
+                        }
+                        if (comentario) {
+                            System.out.println("MULTIPLE" + linea);
+                            continue;
                         }
 
 
-                    } else {
-                        log.info("Patron sin delimitador");
-                        Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
-                        Matcher m = p.matcher(linea);
-                        log.info("Patron reemplazado " + patron);
-                        if (m.find()) {
-                            if (pd.get(x).getClasificacion().equals(critico)) {
-                                cantidadCritico++;
-                            } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                cantidadMedio++;
-                            } else {
-                                cantidadBajo++;
+
+                        if (patron.contains(delimitador)) {
+                            log.info("Patron con delimitador");
+                            Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            if (m.find() && group) {
+                                String ident = null;
+                                ident = m.group(1);
+                                numLineaInicio = numLinea;
+                                numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                            } else if (m.find()) {
+                                numLineaInicio = numLinea;
+                                numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
                             }
-                            lineas.add(numLinea);
+                            log.info("Linea inicio " + numLineaInicio);
+                            log.info("Linea final " + numLineaFinal);
+                            if (numLineaInicio > numLineaFinal) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
+                                lineas.add(numLinea);
+                                numLineaInicio = -1;
+                                numLineaFinal = -1;
+                            }
+
+
+                        } else {
+                            log.info("Patron sin delimitador");
+                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            log.info("Patron reemplazado " + patron);
+                            if (m.find()) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
+                                lineas.add(numLinea);
+
+                            }
 
                         }
 
                     }
-
+                    defectos.put(nodo.getPrograma() + pd.get(x).getNombre(), lineas);
                 }
-                defectos.put(nodo.getPrograma() + pd.get(x).getNombre(), lineas);
             }
 
             mapa.put(critico, cantidadCritico);
@@ -267,26 +288,28 @@ public class Analisis {
         try {
 
             archivo = new File(programa);
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
+            if (archivo.isFile()) {
+                fr = new FileReader(archivo);
+                br = new BufferedReader(fr);
 
 
-            log.info("analizarCierre");
+                log.info("analizarCierre");
 
-            if (identificador != null || "".equals(identificador)) {
-                patron = patron.replaceAll("identificador", identificador);
-                log.info("Patron Cierre Identificador " + patron);
-            }
+                if (identificador != null || "".equals(identificador)) {
+                    patron = patron.replaceAll("identificador", identificador);
+                    log.info("Patron Cierre Identificador " + patron);
+                }
 
-            while ((linea = br.readLine()) != null) { // para cada linea del archivo
+                while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                nLinea++;
+                    nLinea++;
 
-                Pattern p = Pattern.compile(patron);
-                Matcher m = p.matcher(linea);
-                log.info("Patron reemplazado Cierre " + patron);
-                if (m.find()) {
-                    numLinea = nLinea;
+                    Pattern p = Pattern.compile(patron);
+                    Matcher m = p.matcher(linea);
+                    log.info("Patron reemplazado Cierre " + patron);
+                    if (m.find()) {
+                        numLinea = nLinea;
+                    }
                 }
             }
         } catch (IOException e) {
