@@ -10,8 +10,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -38,60 +36,87 @@ public class Grafo {
         int numLinea = 0;
         List<Nodo> llamadas;//= new LinkedList<Nodo>();
         List<Nodo> lista = new ArrayList<Nodo>();
+        boolean comentario = false;
 
         try {
+
             for (int i = 0; i < archivos.length; i++) {// para todos los archivos
+
                 String nombreArchivo = ubicacionArchivos + archivos[i];
-                //  System.out.println("funcion a buscar" + nombreArchivo);
-                String nombreFuncion = archivos[i].substring(0, archivos[i].length() - 4);
+                log.info("Nombre Archivo " + nombreArchivo);
+
                 llamadas = new LinkedList<Nodo>();
 
                 for (int x = 0; x < archivos.length; x++) { // con todos los otros , incluyendose
-                    archivo = new File(ubicacionArchivos + archivos[x]);
-
+                    archivo = new File(ubicacionArchivos + archivos[i]);
+                    log.info("file "+archivo.toString());
+                    String nombreFuncion = archivos[x].substring(0, archivos[x].length() - 4);// le quita la extension
+                    log.info("Nombre Funcion " + nombreFuncion);
+                    
                     if (archivo.isFile()) {
                         fr = new FileReader(archivo);
                         br = new BufferedReader(fr);
 
                         while ((linea = br.readLine()) != null) { // para cada linea del archivo
-//                        System.out.println(linea);
+
                             numLinea++;
+                            if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
+                                continue;
+                            }
+                            if (linea.contains("/*") && linea.contains("*/")) {
+                                continue;
+                            }
+                            if (linea.contains("/*")) {  /* validacion comentarios multiples*/
+                                comentario = true;
+                                System.out.println("apertura");
+                            }
+                            if (linea.contains("*/")) {
+                                comentario = false;
+                            }
 
-                            Pattern p = Pattern.compile(nombreFuncion, Pattern.CASE_INSENSITIVE);
-                            Matcher m = p.matcher(linea);
-                            if (m.find()) {
-                                //   System.out.println("encontro " + p.toString() + " en " + ubicacionArchivos + archivos[x]);
-                                String programa = ubicacionArchivos + archivos[x];
-                                if (!llamadas.isEmpty()) {
-                                    for (int j = 0; j < llamadas.size(); j++) {
-                                        //  System.out.println("");
-                                        if (!programa.equals(llamadas.get(j).getPrograma())) {
-                                            //     System.out.println("aaaaaaaaa");
-                                            Nodo n = new Nodo();
-                                            n.setPrograma(programa);
-                                            llamadas.add(n);
+                            if (comentario) {
+                                System.out.println("comentario");
+                                continue;
+                            }
+
+
+
+                            if (!(linea.toLowerCase().contains("function") || linea.toLowerCase().contains("procedure") || linea.toLowerCase().contains("trigger"))) {
+                                //no considera la declaracion de la funcion , procedimiento o trigger
+                                if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
+                                    
+                                    log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivos[x]);
+
+                                    String programa = ubicacionArchivos + nombreFuncion + ".sql";
+                                    if (!llamadas.isEmpty()) {
+                                        for (int j = 0; j < llamadas.size(); j++) {
+  
+                                            if (!programa.equals(llamadas.get(j).getPrograma())) {
+
+                                                Nodo n = new Nodo();
+                                                n.setPrograma(programa);
+                                                llamadas.add(n);
+                                            }
                                         }
-                                    }
-                                } else {
+                                    } else {
 
-                                    Nodo n = new Nodo();
-                                    n.setPrograma(programa);
-                                    llamadas.add(n);
+                                        Nodo n = new Nodo();
+                                        n.setPrograma(programa);
+                                        llamadas.add(n);
+                                    }
+
                                 }
 
                             }
-
                         }
                     }
                 }
-                //System.out.println("size" + lista.size());
                 Nodo n = new Nodo();
                 n.setPrograma(nombreArchivo);
                 n.setLlamadas(llamadas);
                 lista.add(n);
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return lista;
     }

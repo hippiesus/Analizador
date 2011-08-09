@@ -88,14 +88,6 @@ public class Analisis {
             mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
             mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
             mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
-            log.info("Tamaño Lista Llamadas " + archivosFiltrados.get(x).getLlamadas().size());
-            for (int j = 0; j < archivosFiltrados.get(x).getLlamadas().size(); j++) {
-                log.info("Nombre de LLamada " + archivosFiltrados.get(x).getLlamadas().get(j).getPrograma());
-                tmp = analizarNodo(archivosFiltrados.get(x).getLlamadas().get(j));
-                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + critico, tmp.get(critico));
-                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + medio, tmp.get(medio));
-                mapa.put(archivosFiltrados.get(x).getLlamadas().get(j) + bajo, tmp.get(bajo));
-            }
 
         }
 
@@ -183,21 +175,29 @@ public class Analisis {
 
                         numLinea++;
 
+
                         if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
-                            System.out.println("SIMPLE"+linea);
+                            continue;
+                        }
+                        if (linea.contains("/*") && linea.contains("*/")) {
                             continue;
                         }
                         if (linea.contains("/*")) {  /* validacion comentarios multiples*/
-                            comentario = true;           
+                            comentario = true;
                         }
-                        if (linea.contains("*/")) {                     
+                        if (linea.contains("*/")) {
                             comentario = false;
                         }
                         if (comentario) {
-                            System.out.println("MULTIPLE" + linea);
                             continue;
                         }
-
+                        for (int p = 0; p < nodo.getLlamadas().size(); p++) {
+                            String llamada = nodo.getLlamadas().get(p).getPrograma().substring(nodo.getLlamadas().get(p).getPrograma().lastIndexOf("/") + 1, nodo.getLlamadas().get(p).getPrograma().length() - 4);
+                            if (linea.contains(llamada)) {
+                                log.info("LLamando al nodo " + nodo.getLlamadas().get(p).getPrograma() + " desde " + archivo.toString());
+                                analizarNodo(nodo.getLlamadas().get(p));
+                            }
+                        }
 
 
                         if (patron.contains(delimitador)) {
