@@ -4,7 +4,7 @@
 <pls_integer>[]</pls_integer>
 <cierre_cursor>[]</cierre_cursor>
 <cierre_if>[]</cierre_if>
-<fecha>Fri Aug 12 17:14:50 CLT 2011</fecha>
+<fecha>Fri Aug 12 17:56:19 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo2.sql</nombreArchivo>
 <cantidadDefectosBajo>0</cantidadDefectosBajo>
 <cantidadDefectosMedio>0</cantidadDefectosMedio>
@@ -14,7 +14,7 @@
 <pls_integer>[3, 5, 9, 18, 21, 25]</pls_integer>
 <cierre_cursor>[15]</cierre_cursor>
 <cierre_if>[20]</cierre_if>
-<fecha>Fri Aug 12 17:14:50 CLT 2011</fecha>
+<fecha>Fri Aug 12 17:56:19 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/findcourse.sql</nombreArchivo>
 <cantidadDefectosBajo>6</cantidadDefectosBajo>
 <cantidadDefectosMedio>1</cantidadDefectosMedio>

@@ -68,20 +68,8 @@ public class Analisis {
         Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
-        List<Nodo> archivosFiltrados = new ArrayList<Nodo>();
-        List<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
-        log.info("Tamaño lista " + lista.size());
+        List<Nodo> archivosFiltrados = grafo.crearGrafo(ubicacionArchivos, archivo.list());
 
-        for (int x = 0; x < lista.size(); x++) {
-            //valida que solo sean archivos .sql
-            String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
-            log.info("Filtrando Archivos SQL");
-
-            if (ext.equals("sql")) {
-                archivosFiltrados.add(lista.get(x));
-            }
-        }
-        log.info("Tamaño lista filtrada " + archivosFiltrados.size());
         for (int x = 0; x < archivosFiltrados.size(); x++) {
             log.info("Nombre archivo " + archivosFiltrados.get(x).getPrograma());
             tmp = analizarNodo(archivosFiltrados.get(x));

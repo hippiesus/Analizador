@@ -37,22 +37,36 @@ public class Grafo {
         List<Nodo> llamadas;//= new LinkedList<Nodo>();
         List<Nodo> lista = new ArrayList<Nodo>();
         boolean comentario = false;
-
+        List<String> archivosFiltrados = new ArrayList<String>();
         try {
 
-            for (int i = 0; i < archivos.length; i++) {// para todos los archivos
+            log.info("Tamaño lista " + archivos.length);
+            log.info("Filtrando Archivos SQL");
 
-                String nombreArchivo = ubicacionArchivos + archivos[i];
+            for (int x = 0; x < archivos.length; x++) {
+                //valida que solo sean archivos .sql
+                String ext = archivos[x].substring(archivos[x].length() - 3, archivos[x].length());
+
+                if (ext.equals("sql")) {
+                    System.out.println("java");
+                    archivosFiltrados.add(archivos[x]);
+                }
+            }
+            log.info("Tamaño lista filtrada " + archivosFiltrados.size());
+
+            for (int i = 0; i < archivosFiltrados.size(); i++) {// para todos los archivos
+
+                String nombreArchivo = ubicacionArchivos + archivosFiltrados.get(i);
                 log.info("Nombre Archivo " + nombreArchivo);
 
                 llamadas = new LinkedList<Nodo>();
 
-                for (int x = 0; x < archivos.length; x++) { // con todos los otros , incluyendose
-                    archivo = new File(ubicacionArchivos + archivos[i]);
-                    log.info("file "+archivo.toString());
-                    String nombreFuncion = archivos[x].substring(0, archivos[x].length() - 4);// le quita la extension
+                for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
+                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(x));
+                    log.info("file " + archivo.toString());
+                    String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
                     log.info("Nombre Funcion " + nombreFuncion);
-                    
+
                     if (archivo.isFile()) {
                         fr = new FileReader(archivo);
                         br = new BufferedReader(fr);
@@ -84,13 +98,13 @@ public class Grafo {
                             if (!(linea.toLowerCase().contains("create") || linea.toLowerCase().contains("replace"))) {
                                 //no considera la declaracion de la funcion , procedimiento o trigger
                                 if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
-                                    
-                                    log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivos[x]);
+
+                                    log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivosFiltrados.get(x));
 
                                     String programa = ubicacionArchivos + nombreFuncion + ".sql";
                                     if (!llamadas.isEmpty()) {
                                         for (int j = 0; j < llamadas.size(); j++) {
-  
+
                                             if (!programa.equals(llamadas.get(j).getPrograma())) {
 
                                                 Nodo n = new Nodo();
@@ -117,6 +131,7 @@ public class Grafo {
                 lista.add(n);
             }
         } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return lista;
     }
