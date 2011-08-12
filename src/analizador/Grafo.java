@@ -81,7 +81,7 @@ public class Grafo {
 
 
 
-                            if (!(linea.toLowerCase().contains("function") || linea.toLowerCase().contains("procedure") || linea.toLowerCase().contains("trigger"))) {
+                            if (!(linea.toLowerCase().contains("create") || linea.toLowerCase().contains("replace"))) {
                                 //no considera la declaracion de la funcion , procedimiento o trigger
                                 if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
                                     

@@ -2,7 +2,7 @@
 	<patron>
 		<identificador>2</identificador>
 		<nombre>pls_integer</nombre>
-		<expresion>identificador number:: identificador := identificador1 operador identificador1</expresion>
+		<expresion>identificador number:: identificador := identificadorAlter operador identificadorAlter</expresion>
 		<clasificacion>bajo</clasificacion>
 		<descripcion>open</descripcion>
 		<correccion>open</correccion>
