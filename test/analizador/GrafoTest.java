@@ -43,23 +43,16 @@ public class GrafoTest {
     @Test
     public void testCrearGrafo() {
         System.out.println("crearGrafo");
-        String[] archivos = {"archivo2.sql", "findcourse.sql"};
+        String[] archivos = {"package", "archivo2.sql", "findcourse.sql"};
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
-        List<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos);
-        List<Nodo> llamadas1 = result.get(0).getLlamadas();
-        List<Nodo> llamadas2 = result.get(1).getLlamadas();
+        List<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos, null);
 
-       /* assertEquals(2, result.size());
-        assertEquals(1, llamadas1.size());
-        assertEquals(1, llamadas2.size());*/
-        System.out.println("archivo 1"+ result.get(0).getPrograma());
-        for (int x = 0; x < llamadas1.size(); x++) {
-            System.out.println("archivo1 llama a "+llamadas1.get(x).getPrograma());
-        }
-        System.out.println("archivo 2"+result.get(1).getPrograma());
-        for (int x = 0; x < llamadas2.size(); x++) {
-            System.out.println("archivo2 llama a "+llamadas2.get(x).getPrograma());
+        for (int y = 0; y < result.size(); y++) {
+            System.out.println("archivo " + y + " " + result.get(y).getPrograma());
+            for (int x = 0; x < result.get(y).getLlamadas().size(); x++) {
+                System.out.println("archivo" + result.get(y).getPrograma() + " llama a " + result.get(y).getLlamadas().get(x).getPrograma());
+            }
         }
 
     }

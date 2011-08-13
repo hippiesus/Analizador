@@ -4,7 +4,7 @@
 <pls_integer>[]</pls_integer>
 <cierre_cursor>[]</cierre_cursor>
 <cierre_if>[]</cierre_if>
-<fecha>Fri Aug 12 17:56:19 CLT 2011</fecha>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/archivo2.sql</nombreArchivo>
 <cantidadDefectosBajo>0</cantidadDefectosBajo>
 <cantidadDefectosMedio>0</cantidadDefectosMedio>
@@ -14,10 +14,167 @@
 <pls_integer>[3, 5, 9, 18, 21, 25]</pls_integer>
 <cierre_cursor>[15]</cierre_cursor>
 <cierre_if>[20]</cierre_if>
-<fecha>Fri Aug 12 17:56:19 CLT 2011</fecha>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
 <nombreArchivo>/Users/juancarlos/tmp/findcourse.sql</nombreArchivo>
 <cantidadDefectosBajo>6</cantidadDefectosBajo>
 <cantidadDefectosMedio>1</cantidadDefectosMedio>
 <cantidadDefectosCritico>1</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/Claudio_Latorre.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/ClaudioGalleguillos.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[93, 131]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/Eliana_Jara.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[102]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/MMontecinos.sql</nombreArchivo>
+<cantidadDefectosBajo>1</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mClaudio_Latorre.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mClaudioGalleguillos.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[93, 131]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mEliana_Jara.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[102]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mMMontecinos.sql</nombreArchivo>
+<cantidadDefectosBajo>1</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mRodrigoUgalde.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mSebastianCaceres.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[102, 142]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mT3-cristobalcuevas.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[100, 126]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package/mtrabajo recuperativo.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/package</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/SebastianCaceres.sql</nombreArchivo>
+<cantidadDefectosBajo>0</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[102, 142]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/T3-cristobalcuevas.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
+</estadistica>
+<estadistica>
+<pls_integer>[100, 126]</pls_integer>
+<cierre_cursor>[]</cierre_cursor>
+<cierre_if>[]</cierre_if>
+<fecha>Fri Aug 12 22:15:46 CLT 2011</fecha>
+<nombreArchivo>/Users/juancarlos/tmp/packagecopia/trabajo recuperativo.sql</nombreArchivo>
+<cantidadDefectosBajo>2</cantidadDefectosBajo>
+<cantidadDefectosMedio>0</cantidadDefectosMedio>
+<cantidadDefectosCritico>0</cantidadDefectosCritico>
 </estadistica>
 </estadisticas>

@@ -23,21 +23,23 @@ public class Grafo {
     private final static Logger log = Logger.getLogger(Grafo.class);
 
     public Grafo() {
+
         BasicConfigurator.configure();
 
     }
 
-    public List<Nodo> crearGrafo(String ubicacionArchivos, String[] archivos) {
+    public List<Nodo> crearGrafo(String ubicacionArchivos, String[] archivos, String pack) {
         /*analizara el nombre de un archivo y lo buscara dentro de su archivo y de otros */
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
         String linea;
         int numLinea = 0;
-        List<Nodo> llamadas;//= new LinkedList<Nodo>();
+        List<Nodo> llamadas;
         List<Nodo> lista = new ArrayList<Nodo>();
         boolean comentario = false;
         List<String> archivosFiltrados = new ArrayList<String>();
+
         try {
 
             log.info("Tamaño lista " + archivos.length);
@@ -47,8 +49,7 @@ public class Grafo {
                 //valida que solo sean archivos .sql
                 String ext = archivos[x].substring(archivos[x].length() - 3, archivos[x].length());
 
-                if (ext.equals("sql")) {
-                    System.out.println("java");
+                if (ext.equals("sql") || !archivos[x].contains(".")) {
                     archivosFiltrados.add(archivos[x]);
                 }
             }
@@ -62,9 +63,12 @@ public class Grafo {
                 llamadas = new LinkedList<Nodo>();
 
                 for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
-                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(x));
+                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(i));
                     log.info("file " + archivo.toString());
                     String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
+                    if (pack != null) {
+                        nombreFuncion = pack + "." + nombreFuncion;
+                    }
                     log.info("Nombre Funcion " + nombreFuncion);
 
                     if (archivo.isFile()) {
@@ -82,14 +86,12 @@ public class Grafo {
                             }
                             if (linea.contains("/*")) {  /* validacion comentarios multiples*/
                                 comentario = true;
-                                System.out.println("apertura");
                             }
                             if (linea.contains("*/")) {
                                 comentario = false;
                             }
 
                             if (comentario) {
-                                System.out.println("comentario");
                                 continue;
                             }
 
@@ -97,6 +99,7 @@ public class Grafo {
 
                             if (!(linea.toLowerCase().contains("create") || linea.toLowerCase().contains("replace"))) {
                                 //no considera la declaracion de la funcion , procedimiento o trigger
+
                                 if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
 
                                     log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivosFiltrados.get(x));
@@ -123,6 +126,14 @@ public class Grafo {
 
                             }
                         }
+                    } else if (archivo.isDirectory()) {
+                        log.info("Es directorio " + archivo.toString());
+                        File f = new File(archivo.toString());
+                        lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName().toString()));
+                        List<String> n = new ArrayList<String>();
+                        n.add(archivosFiltrados.get(x));
+                        archivosFiltrados.removeAll(n); // solo 1 remove no elimina todo
+
                     }
                 }
                 Nodo n = new Nodo();

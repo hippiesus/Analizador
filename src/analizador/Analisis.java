@@ -55,11 +55,12 @@ public class Analisis {
     final String bajo = "bajo";
     final String operador = "[\\*\\+\\-\\/]";
     Map<String, List<Integer>> defectos;
+    List<PatronDefecto> pd;
 
     public Analisis() {
         BasicConfigurator.configure();
         defectos = new HashMap<String, List<Integer>>();
-
+        pd = obtenerPatrones();
 
     }
 
@@ -68,7 +69,7 @@ public class Analisis {
         Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
-        List<Nodo> archivosFiltrados = grafo.crearGrafo(ubicacionArchivos, archivo.list());
+        List<Nodo> archivosFiltrados = grafo.crearGrafo(ubicacionArchivos, archivo.list(), null);
 
         for (int x = 0; x < archivosFiltrados.size(); x++) {
             log.info("Nombre archivo " + archivosFiltrados.get(x).getPrograma());
@@ -89,7 +90,6 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        List<PatronDefecto> pd = obtenerPatrones();
         String linea;
         int numLinea = 0;
         int cantidadCritico = 0;
@@ -201,8 +201,8 @@ public class Analisis {
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
                             }
-                            log.info("Linea inicio " + numLineaInicio);
-                            log.info("Linea final " + numLineaFinal);
+                            //log.info("Linea inicio " + numLineaInicio);
+                            //log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
                                 if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
@@ -344,13 +344,17 @@ public class Analisis {
                 Element cantDefCElem = document.createElement("cantidadDefectosCritico");
                 Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + critico)));
 
-                List<PatronDefecto> pd = obtenerPatrones();
                 for (int j = 0; j < pd.size(); j++) {
                     Element e = document.createElement(pd.get(j).getNombre());
-                    Text t = document.createTextNode(defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()).toString());
-                    raiz.appendChild(e);
-                    e.appendChild(t);
+                    
+                    if (defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre())!= null) {
 
+                        Text t = document.createTextNode(defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()).toString());
+                        raiz.appendChild(e);
+                        e.appendChild(t);
+                    } else {
+                        continue;
+                    }
                 }
 
                 document.getDocumentElement().appendChild(raiz);
