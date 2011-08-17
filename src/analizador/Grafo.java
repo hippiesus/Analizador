@@ -21,10 +21,13 @@ import org.apache.log4j.Logger;
 public class Grafo {
 
     private final static Logger log = Logger.getLogger(Grafo.class);
+    List<String> a;
+    int cont=0;
 
     public Grafo() {
 
         BasicConfigurator.configure();
+        a = new ArrayList<String>();
 
     }
 
@@ -39,7 +42,6 @@ public class Grafo {
         List<Nodo> lista = new ArrayList<Nodo>();
         boolean comentario = false;
         List<String> archivosFiltrados = new ArrayList<String>();
-
         try {
 
             log.info("Tamaño lista " + archivos.length);
@@ -63,7 +65,7 @@ public class Grafo {
                 llamadas = new LinkedList<Nodo>();
 
                 for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
-                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(i));
+                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(x));
                     log.info("file " + archivo.toString());
                     String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
                     if (pack != null) {
@@ -129,17 +131,20 @@ public class Grafo {
                     } else if (archivo.isDirectory()) {
                         log.info("Es directorio " + archivo.toString());
                         File f = new File(archivo.toString());
-                        lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName().toString()));
-                        List<String> n = new ArrayList<String>();
-                        n.add(archivosFiltrados.get(x));
-                        archivosFiltrados.removeAll(n); // solo 1 remove no elimina todo
-
+                        lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName()));
+                        a.add(archivo.getName());
+                        archivosFiltrados.removeAll(a);
+                       // archivosFiltrados.remove(archivo.getName());
                     }
                 }
+                
+                if(nombreArchivo.contains(".sql")){
+                    System.out.println("java"+cont++);
                 Nodo n = new Nodo();
                 n.setPrograma(nombreArchivo);
                 n.setLlamadas(llamadas);
                 lista.add(n);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage());

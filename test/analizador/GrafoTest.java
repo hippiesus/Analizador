@@ -43,7 +43,7 @@ public class GrafoTest {
     @Test
     public void testCrearGrafo() {
         System.out.println("crearGrafo");
-        String[] archivos = {"package", "archivo2.sql", "findcourse.sql"};
+        String[] archivos = {"archivo2.sql", "findcourse.sql","archivoNOVALIDO.txt"};
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
         List<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos, null);
