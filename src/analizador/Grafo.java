@@ -21,13 +21,10 @@ import org.apache.log4j.Logger;
 public class Grafo {
 
     private final static Logger log = Logger.getLogger(Grafo.class);
-    List<String> a;
 
     public Grafo() {
 
         BasicConfigurator.configure();
-        a = new ArrayList<String>();
-
     }
 
     public List<Nodo> crearGrafo(String ubicacionArchivos, String[] archivos, String pack) {
@@ -132,7 +129,6 @@ public class Grafo {
                     log.info("Es directorio " + archivo.toString());
                     File f = new File(archivo.toString());
                     lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName()));
-                    a.add(archivo.getName());
                 }
 
 

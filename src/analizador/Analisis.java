@@ -79,7 +79,7 @@ public class Analisis {
             mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
 
         }
-
+        
         generarXML(mapa, archivosFiltrados);
 
     }
