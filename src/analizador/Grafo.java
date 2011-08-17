@@ -22,7 +22,6 @@ public class Grafo {
 
     private final static Logger log = Logger.getLogger(Grafo.class);
     List<String> a;
-    int cont=0;
 
     public Grafo() {
 
@@ -61,41 +60,41 @@ public class Grafo {
 
                 String nombreArchivo = ubicacionArchivos + archivosFiltrados.get(i);
                 log.info("Nombre Archivo " + nombreArchivo);
-
+                archivo = new File(nombreArchivo);
                 llamadas = new LinkedList<Nodo>();
 
-                for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
-                    archivo = new File(ubicacionArchivos + archivosFiltrados.get(x));
-                    log.info("file " + archivo.toString());
-                    String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
-                    if (pack != null) {
-                        nombreFuncion = pack + "." + nombreFuncion;
-                    }
-                    log.info("Nombre Funcion " + nombreFuncion);
+                if (archivo.isFile()) {
+                    fr = new FileReader(archivo);
+                    br = new BufferedReader(fr);
 
-                    if (archivo.isFile()) {
-                        fr = new FileReader(archivo);
-                        br = new BufferedReader(fr);
+                    while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
-                        while ((linea = br.readLine()) != null) { // para cada linea del archivo
+                        numLinea++;
+                        if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
+                            continue;
+                        }
+                        if (linea.contains("/*") && linea.contains("*/")) {
+                            continue;
+                        }
+                        if (linea.contains("/*")) {  /* validacion comentarios multiples*/
+                            comentario = true;
+                        }
+                        if (linea.contains("*/")) {
+                            comentario = false;
+                        }
 
-                            numLinea++;
-                            if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
-                                continue;
-                            }
-                            if (linea.contains("/*") && linea.contains("*/")) {
-                                continue;
-                            }
-                            if (linea.contains("/*")) {  /* validacion comentarios multiples*/
-                                comentario = true;
-                            }
-                            if (linea.contains("*/")) {
-                                comentario = false;
-                            }
+                        if (comentario) {
+                            continue;
+                        }
 
-                            if (comentario) {
-                                continue;
+                        for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
+
+                            log.info("file " + archivo.toString());
+                            String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
+                            if (pack != null) {
+                                nombreFuncion = pack + "." + nombreFuncion;
                             }
+                            log.info("Nombre Funcion " + nombreFuncion);
 
 
 
@@ -128,27 +127,27 @@ public class Grafo {
 
                             }
                         }
-                    } else if (archivo.isDirectory()) {
-                        log.info("Es directorio " + archivo.toString());
-                        File f = new File(archivo.toString());
-                        lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName()));
-                        a.add(archivo.getName());
-                        archivosFiltrados.removeAll(a);
-                       // archivosFiltrados.remove(archivo.getName());
                     }
+                } else if (archivo.isDirectory()) {
+                    log.info("Es directorio " + archivo.toString());
+                    File f = new File(archivo.toString());
+                    lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName()));
+                    a.add(archivo.getName());
                 }
-                
-                if(nombreArchivo.contains(".sql")){
-                    System.out.println("java"+cont++);
-                Nodo n = new Nodo();
-                n.setPrograma(nombreArchivo);
-                n.setLlamadas(llamadas);
-                lista.add(n);
+
+
+                if (nombreArchivo.contains(".sql")) {
+                    Nodo n = new Nodo();
+                    n.setPrograma(nombreArchivo);
+                    n.setLlamadas(llamadas);
+                    lista.add(n);
                 }
             }
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+
         return lista;
     }
 }
