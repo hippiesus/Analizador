@@ -16,8 +16,9 @@ public class Main {
     public static void main(String[] args) {
         Analisis analisis = new Analisis();
         if (args.length != 0) { // valida que se le pase la ruta
-            if (!"/".equals(args[0].substring(args[0].length()-1,args[0].length()))) {
-                args[0]=args[0]+"/";
+            args[0] = args[0].replace("\"", "");// cuando hay espacio en las rutas utilizan ""
+            if (!args[0].substring(args[0].length() - 2, args[0].length()).contains("/")) {
+                args[0] = args[0] + System.getProperty("file.separator");
             }
             System.out.println("Los archivos se buscaran en:" + args[0]);
             analisis.detectarDefectos(args[0]);
