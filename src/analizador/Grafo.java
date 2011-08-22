@@ -45,9 +45,11 @@ public class Grafo {
 
             for (int x = 0; x < archivos.length; x++) {
                 //valida que solo sean archivos .sql
-                String ext = archivos[x].substring(archivos[x].length() - 3, archivos[x].length());
-
-                if (ext.equals("sql") || !archivos[x].contains(".")) {
+                String ext = null;
+                if (archivos[x].contains(".")) { // valida que sea archivo
+                    ext = archivos[x].substring(archivos[x].length() - 3, archivos[x].length());
+                }
+                if ("sql".equals(ext) || !archivos[x].contains(".")) {
                     archivosFiltrados.add(archivos[x]);
                 }
             }
@@ -87,48 +89,52 @@ public class Grafo {
                         for (int x = 0; x < archivosFiltrados.size(); x++) { // con todos los otros , incluyendose
 
                             log.info("file " + archivo.toString());
-                            String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
-                            if (pack != null) {
-                                nombreFuncion = pack + "." + nombreFuncion;
-                            }
-                            log.info("Nombre Funcion " + nombreFuncion);
+                            if (archivosFiltrados.get(x).contains(".")) {
+                                String nombreFuncion = archivosFiltrados.get(x).substring(0, archivosFiltrados.get(x).length() - 4);// le quita la extension
+
+                                if (pack != null) {
+                                    nombreFuncion = pack + "." + nombreFuncion;
+                                }
+                                log.info("Nombre Funcion " + nombreFuncion);
 
 
 
-                            if (!(linea.toLowerCase().contains("create") || linea.toLowerCase().contains("replace"))) {
-                                //no considera la declaracion de la funcion , procedimiento o trigger
+                                if (!(linea.toLowerCase().contains("create") || linea.toLowerCase().contains("replace"))) {
+                                    //no considera la declaracion de la funcion , procedimiento o trigger
 
-                                if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
+                                    if (linea.toLowerCase().contains(nombreFuncion.toLowerCase())) { // se busca en la linea el nombre de la funcion
 
-                                    log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivosFiltrados.get(x));
+                                        log.info("encontro " + nombreFuncion + " en " + ubicacionArchivos + archivosFiltrados.get(x));
 
-                                    String programa = ubicacionArchivos + nombreFuncion + ".sql";
-                                    if (!llamadas.isEmpty()) {
-                                        for (int j = 0; j < llamadas.size(); j++) {
+                                        String programa = ubicacionArchivos + nombreFuncion + ".sql";
+                                        if (!llamadas.isEmpty()) {
+                                            for (int j = 0; j < llamadas.size(); j++) {
 
-                                            if (!programa.equals(llamadas.get(j).getPrograma())) {
+                                                if (!programa.equals(llamadas.get(j).getPrograma())) {
 
-                                                Nodo n = new Nodo();
-                                                n.setPrograma(programa);
-                                                llamadas.add(n);
+                                                    Nodo n = new Nodo();
+                                                    n.setPrograma(programa);
+                                                    llamadas.add(n);
+                                                }
                                             }
-                                        }
-                                    } else {
+                                        } else {
 
-                                        Nodo n = new Nodo();
-                                        n.setPrograma(programa);
-                                        llamadas.add(n);
+                                            Nodo n = new Nodo();
+                                            n.setPrograma(programa);
+                                            llamadas.add(n);
+                                        }
+
                                     }
 
                                 }
-
                             }
                         }
                     }
                 } else if (archivo.isDirectory()) {
                     log.info("Es directorio " + archivo.toString());
                     File f = new File(archivo.toString());
-                    lista.addAll(crearGrafo(archivo.toString() + "/", f.list(), archivo.getName()));
+                    
+                    lista.addAll(crearGrafo(archivo.toString() + System.getProperty("file.separator"), f.list(), archivo.getName())); // file.separator obtiene / para unix y \para win
                 }
 
 
@@ -141,7 +147,7 @@ public class Grafo {
             }
 
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.info(e.getMessage());
         }
 
         return lista;
