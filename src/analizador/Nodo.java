@@ -13,7 +13,7 @@ import java.util.List;
 public class Nodo {
     private  String programa;
     
-    private List<Nodo> llamadas= new LinkedList<Nodo>();
+    private List<Nodo> relaciones= new LinkedList<Nodo>();
     /**
      * @return the programa
      */
@@ -32,14 +32,14 @@ public class Nodo {
      * @return the llamadas
      */
     public List<Nodo> getLlamadas() {
-        return llamadas;
+        return relaciones;
     }
 
     /**
      * @param llamadas the llamadas to set
      */
     public void setLlamadas(List<Nodo> llamadas) {
-        this.llamadas = llamadas;
+        this.relaciones = llamadas;
     }
     
 }

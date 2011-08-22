@@ -105,7 +105,7 @@ public class Analisis {
         try {
 
             archivo = new File(nodo.getPrograma());
-
+        
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
                 List<Integer> lineas = new ArrayList<Integer>();
