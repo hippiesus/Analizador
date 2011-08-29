@@ -4,7 +4,7 @@
  */
 package analizador;
 
-import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author juancarlos
  */
 public class GrafoTest {
-    
+
     public GrafoTest() {
     }
 
@@ -28,11 +28,11 @@ public class GrafoTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -43,11 +43,17 @@ public class GrafoTest {
     @Test
     public void testCrearGrafo() {
         System.out.println("crearGrafo");
-        String[] archivos = {"archivo.sql", "archivo2.sql"};
-        String ubicacionArchivos="/Users/juancarlos/tmp/";
+        String[] archivos = {"archivo2.sql", "findcourse.sql","archivoNOVALIDO.txt"};
+        String ubicacionArchivos = "/Users/juancarlos/tmp/";
         Grafo instance = new Grafo();
-        ArrayList result = instance.crearGrafo(ubicacionArchivos,archivos);
-        assertEquals(2,result.size());
-                
+        List<Nodo> result = instance.crearGrafo(ubicacionArchivos, archivos, null);
+
+        for (int y = 0; y < result.size(); y++) {
+            System.out.println("archivo " + y + " " + result.get(y).getPrograma());
+            for (int x = 0; x < result.get(y).getLlamadas().size(); x++) {
+                System.out.println("archivo" + result.get(y).getPrograma() + " llama a " + result.get(y).getLlamadas().get(x).getPrograma());
+            }
+        }
+
     }
 }

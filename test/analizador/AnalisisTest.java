@@ -5,6 +5,7 @@
 package analizador;
 
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -59,16 +60,16 @@ public class AnalisisTest {
     public void testAnalizarNodo() {
         System.out.println("analizarNodo");
         Nodo nodo = new Nodo();
-        nodo.setPrograma("/Users/juancarlos/tmp/archivo.sql");
+        nodo.setPrograma("/Users/juancarlos/tmp/findcourse.sql");
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
         assertEquals(3, mapa.size());
         int critico=mapa.get("critico");
         int medio=mapa.get("medio");
         int bajo=mapa.get("bajo");
-        assertEquals(3,critico);
+        assertEquals(1,critico);
         assertEquals(1,medio);
-        assertEquals(4,bajo);
+        assertEquals(0,bajo);
         
         
     }
@@ -76,12 +77,12 @@ public class AnalisisTest {
     @Test
     public void testAnalizarCierre() {
         System.out.println("analizarCierre");
-        String patron="close\\s+([A-Za-z0-9._$#]+)";
+        String patron="close (identificador)";
         String ident="c1";               
-        String programa="/Users/juancarlos/tmp/archivo.sql";
+        String programa="/Users/juancarlos/tmp/findcourse.sql";
         Analisis instance = new Analisis();
         int res=instance.analizarCierre(ident, patron,programa);
-        assertEquals(14,res);
+        assertEquals(16,res);
         
     }
 
@@ -92,7 +93,7 @@ public class AnalisisTest {
     public void testGenerarXML() {
         System.out.println("generarXML");
         Analisis instance = new Analisis();
-        ArrayList<String> lista = new ArrayList<String>();
+        ArrayList<Nodo> lista = new ArrayList<Nodo>();
         HashMap<String,Integer> mapa= new HashMap<String, Integer>(); 
         boolean exp=instance.generarXML(mapa, lista);
         assertTrue(exp);
@@ -104,8 +105,8 @@ public class AnalisisTest {
     public void testObtenerPatrones() {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
-        ArrayList result = instance.obtenerPatrones();
-        assertEquals(4, result.size());
+        List result = instance.obtenerPatrones();
+        assertEquals(3, result.size());
     }
     
 }

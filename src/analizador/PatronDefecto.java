@@ -11,9 +11,10 @@ package analizador;
 public class PatronDefecto {
     private int identificador;
     private String nombre;
+    private String expresion;
     private String clasificacion;
     private String descripcion;
-
+    private String correccion;
   
     
     /**
@@ -70,6 +71,34 @@ public class PatronDefecto {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the correccion
+     */
+    public String getCorreccion() {
+        return correccion;
+    }
+
+    /**
+     * @param correccion the correccion to set
+     */
+    public void setCorreccion(String correccion) {
+        this.correccion = correccion;
+    }
+
+    /**
+     * @return the expresion
+     */
+    public String getExpresion() {
+        return expresion;
+    }
+
+    /**
+     * @param expresion the expresion to set
+     */
+    public void setExpresion(String expresion) {
+        this.expresion = expresion;
     }
     
     

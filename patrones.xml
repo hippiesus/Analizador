@@ -1,28 +1,29 @@
 <patrones>
 	<patron>
+		<identificador>2</identificador>
+		<nombre>pls_integer</nombre>
+		<expresion>identificador number:: identificador := identificadorAlter operador identificadorAlter</expresion>
+		<clasificacion>bajo</clasificacion>
+		<descripcion>open</descripcion>
+		<correccion>open</correccion>
+	</patron>
+	
+	<patron>
 		<identificador>1</identificador>
-		<nombre>open identificador:close identificador</nombre>
+		<nombre>cierre_cursor</nombre>
+		<expresion>open identificador::close identificador</expresion>
 		<clasificacion>critico</clasificacion>
 		<descripcion>open</descripcion>
+		<correccion>open</correccion>
 	</patron>
 
 	<patron>
-		<identificador>2</identificador>
-		<nombre>if (identificador) then:end if</nombre>
+		<identificador>4</identificador>
+		<nombre>cierre_if</nombre>
+		<expresion>if (identificador) then::end if</expresion>
 		<clasificacion>medio</clasificacion>
 		<descripcion>open</descripcion>
-	</patron>
-	<patron>
-		<identificador>3</identificador>
-		<nombre>begin</nombre>
-		<clasificacion>bajo</clasificacion>
-		<descripcion>open</descripcion>
-	</patron>
-	<patron>
-		<identificador>4</identificador>
-		<nombre>return</nombre>
-		<clasificacion>bajo</clasificacion>
-		<descripcion>open</descripcion>
+		<correccion>open</correccion>
 	</patron>
 
 </patrones>

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,17 +44,23 @@ import org.xml.sax.SAXException;
 public class Analisis {
 
     private final static Logger log = Logger.getLogger(Analisis.class);
-    final String delimitador = ":";
+    final String delimitador = "::";
     final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
-    final String espacioBlanco = "\\\\s+";
+    final String identificadorAlter = "([A-Za-z0-9._\\$#]+)";
+    final String espacioBlanco = "\\\\s*";
     final String parentesisApertura = "\\\\(";
     final String parentesisCierre = "\\\\)";
     final String critico = "critico";
     final String medio = "medio";
     final String bajo = "bajo";
+    final String operador = "[\\*\\+\\-\\/]";
+    Map<String, List<Integer>> defectos;
+    List<PatronDefecto> pd;
 
     public Analisis() {
         BasicConfigurator.configure();
+        defectos = new HashMap<String, List<Integer>>();
+        pd = obtenerPatrones();
 
     }
 
@@ -62,25 +69,17 @@ public class Analisis {
         Map<String, Integer> tmp = new HashMap<String, Integer>();
         Grafo grafo = new Grafo();
         File archivo = new File(ubicacionArchivos);
-        ArrayList<String> archivosFiltrados = new ArrayList<String>();
-        ArrayList<Nodo> lista = grafo.crearGrafo(ubicacionArchivos, archivo.list());
-        log.info("Tamaño lista " + lista.size());
+        List<Nodo> archivosFiltrados = grafo.crearGrafo(ubicacionArchivos, archivo.list(), null);
 
-        for (int x = 0; x < lista.size(); x++) {
-            //valida que solo sean archivos .sql
-            String ext = lista.get(x).getPrograma().substring(lista.get(x).getPrograma().length() - 3, lista.get(x).getPrograma().length());
-            log.info("Filtrando Archivos SQL");
-
-            if (ext.equals("sql")) {
-                archivosFiltrados.add(lista.get(x).getPrograma());
-                log.info("Nombre archivo " + lista.get(x).getPrograma());
-                tmp = analizarNodo(lista.get(x));
-                mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
-                mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
-                mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
-            }
+        for (int x = 0; x < archivosFiltrados.size(); x++) {
+            log.info("Nombre archivo " + archivosFiltrados.get(x).getPrograma());
+            tmp = analizarNodo(archivosFiltrados.get(x));
+            mapa.put(archivosFiltrados.get(x) + critico, tmp.get(critico));
+            mapa.put(archivosFiltrados.get(x) + medio, tmp.get(medio));
+            mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
 
         }
+        
         generarXML(mapa, archivosFiltrados);
 
     }
@@ -91,7 +90,6 @@ public class Analisis {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        ArrayList<PatronDefecto> pd = obtenerPatrones();
         String linea;
         int numLinea = 0;
         int cantidadCritico = 0;
@@ -101,91 +99,146 @@ public class Analisis {
         int numLineaFinal = -1;
         String inicio = null;
         String cierre = null;
+        boolean group;
+        boolean comentario = false;
 
         try {
 
             archivo = new File(nodo.getPrograma());
-
+        
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
-                fr = new FileReader(archivo);
-                br = new BufferedReader(fr);
+                List<Integer> lineas = new ArrayList<Integer>();
+                if (archivo.isFile()) {
+                    fr = new FileReader(archivo);
+                    br = new BufferedReader(fr);
+                    group = false;
+                    String patron = pd.get(x).getExpresion();
+                    if (patron.contains(" ")) {
+                        log.info("Reemplazando espacio en blanco");
+                        patron = patron.replaceAll(" ", espacioBlanco);
+                    }
+                    if (patron.contains("(") && patron.contains(")")) {
+                        log.info("Reemplazando ( )");
+                        patron = patron.replaceAll("\\(", parentesisApertura);
+                        patron = patron.replaceAll("\\)", parentesisCierre);
+                    }
 
-                String patron = pd.get(x).getNombre();
-                if (patron.contains(" ")) {
-                    log.info("Reemplazando espacio en blanco");
-                    patron = patron.replaceAll(" ", espacioBlanco);
-                }
-                if (patron.contains("(") && patron.contains(")")) {
-                    log.info("Reemplazando ( )");
-                    patron = patron.replaceAll("\\(", parentesisApertura);
-                    patron = patron.replaceAll("\\)", parentesisCierre);
-                }
-                log.info("Patron " + patron);
 
-                if (patron.contains("identificador")) {
-                    log.info("Patron con identificador");
-                    patron = patron.replaceAll("identificador", identificadorOracle);
-                }
-                if (patron.contains(delimitador)) {
-                    log.info("Patron con delimitador");
-                    int delimitadorPosicion = patron.indexOf(delimitador);
-                    inicio = patron.substring(0, delimitadorPosicion);
-                    cierre = patron.substring(patron.indexOf(delimitador) + 1, patron.length());
-                }
-
-                while ((linea = br.readLine()) != null) { // para cada linea del archivo
-
-                    numLinea++;
+                    if (patron.contains("operador")) {
+                        log.info("Patron con operador");
+                        patron = patron.replaceAll("operador", operador);
+                        log.info(patron);
+                    }
+                    if (patron.contains("identificadorAlter")) {
+                        log.info("Patron con IdentificadorAlternativo");
+                        patron = patron.replaceAll("identificadorAlter", identificadorAlter);
+                        log.info(patron);
+                    }
 
                     if (patron.contains(delimitador)) {
                         log.info("Patron con delimitador");
-                        Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
-                        Matcher m = p.matcher(linea);
-
-                        if (m.find()) {
-                            String ident = m.group(1);
-                            numLineaInicio = numLinea;
-                            numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                        int delimitadorPosicion = patron.indexOf(delimitador);
+                        inicio = patron.substring(0, delimitadorPosicion);
+                        cierre = patron.substring(patron.indexOf(delimitador) + delimitador.length(), patron.length());
+                    }
+                    if (inicio != null) {
+                        if (inicio.contains("identificador")) {
+                            log.info("Patron con identificador");
+                            inicio = inicio.replaceAll("identificador", identificadorOracle);
+                            log.info(inicio);
+                            group = true;
                         }
-                        log.info("Linea inicio " + numLineaInicio);
-                        log.info("Linea final " + numLineaFinal);
-                        if (numLineaInicio > numLineaFinal) {
-                            if (pd.get(x).getClasificacion().equals(critico)) {
-                                cantidadCritico++;
-                            } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                cantidadMedio++;
-                            } else {
-                                cantidadBajo++;
+                    }
+                    if (patron.contains("identificador")) {
+                        log.info("Patron con identificador");
+                        patron = patron.replaceAll("identificador", identificadorOracle);
+                        log.info(patron);
+                        group = true;
+                    }
+
+                    numLinea = 0;
+
+                    while ((linea = br.readLine()) != null) { // para cada linea del archivo
+
+                        numLinea++;
+
+
+                        if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
+                            continue;
+                        }
+                        if (linea.contains("/*") && linea.contains("*/")) {
+                            continue;
+                        }
+                        if (linea.contains("/*")) {  /* validacion comentarios multiples*/
+                            comentario = true;
+                        }
+                        if (linea.contains("*/")) {
+                            comentario = false;
+                        }
+                        if (comentario) {
+                            continue;
+                        }
+                        for (int p = 0; p < nodo.getLlamadas().size(); p++) {
+                            String llamada = nodo.getLlamadas().get(p).getPrograma().substring(nodo.getLlamadas().get(p).getPrograma().lastIndexOf("/") + 1, nodo.getLlamadas().get(p).getPrograma().length() - 4);
+                            if (linea.contains(llamada)) {
+                                log.info("LLamando al nodo " + nodo.getLlamadas().get(p).getPrograma() + " desde " + archivo.toString());
+                                analizarNodo(nodo.getLlamadas().get(p));
                             }
-                            System.out.println("DEFECTO ENCONTRADO " + pd.get(x).getNombre());
-                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
-                            numLineaInicio = -1;
-                            numLineaFinal = -1;
                         }
 
 
-                    } else {
-                        log.info("Patron sin delimitador");
-                        Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
-                        Matcher m = p.matcher(linea);
-                        log.info("Patron reemplazado " + patron);
-                        if (m.find()) {
-                            if (pd.get(x).getClasificacion().equals(critico)) {
-                                cantidadCritico++;
-                            } else if (pd.get(x).getClasificacion().equals(medio)) {
-                                cantidadMedio++;
-                            } else {
-                                cantidadBajo++;
+                        if (patron.contains(delimitador)) {
+                            log.info("Patron con delimitador");
+                            Pattern p = Pattern.compile(inicio, Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            if (m.find() && group) {
+                                String ident = null;
+                                ident = m.group(1);
+                                numLineaInicio = numLinea;
+                                numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
+                            } else if (m.find()) {
+                                numLineaInicio = numLinea;
+                                numLineaFinal = analizarCierre(null, cierre, nodo.getPrograma());
                             }
-                            System.out.println("DEFECTO ENCONTRADO");
-                            System.out.println("NUMERO DE LINEA " + numLinea + "\n" + linea);
+                            //log.info("Linea inicio " + numLineaInicio);
+                            //log.info("Linea final " + numLineaFinal);
+                            if (numLineaInicio > numLineaFinal) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
+                                lineas.add(numLinea);
+                                numLineaInicio = -1;
+                                numLineaFinal = -1;
+                            }
+
+
+                        } else {
+                            log.info("Patron sin delimitador");
+                            Pattern p = Pattern.compile(patron, Pattern.CASE_INSENSITIVE);
+                            Matcher m = p.matcher(linea);
+                            log.info("Patron reemplazado " + patron);
+                            if (m.find()) {
+                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                    cantidadCritico++;
+                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                    cantidadMedio++;
+                                } else {
+                                    cantidadBajo++;
+                                }
+                                lineas.add(numLinea);
+
+                            }
+
                         }
 
                     }
-
+                    defectos.put(nodo.getPrograma() + pd.get(x).getNombre(), lineas);
                 }
-
             }
 
             mapa.put(critico, cantidadCritico);
@@ -212,40 +265,36 @@ public class Analisis {
 
     public int analizarCierre(String identificador, String patron, String programa) {
 
-        Map<String, Integer> mapa = new HashMap<String, Integer>();
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        ArrayList<PatronDefecto> pd = obtenerPatrones();
         int numLinea = -1;
+
+        String linea;
+        int nLinea = 0;
 
         try {
 
             archivo = new File(programa);
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
+            if (archivo.isFile()) {
+                fr = new FileReader(archivo);
+                br = new BufferedReader(fr);
 
-            String linea;
-            int nLinea = 0;
 
-            log.info("analizarCierre");
+                log.info("analizarCierre");
 
-            if (identificador != null) {
-                log.info("Patron " + patron);
-                patron = patron.replace("identificador", identificador);
-            } else {
+                if (identificador != null || "".equals(identificador)) {
+                    patron = patron.replaceAll("identificador", identificador);
+                    log.info("Patron Cierre Identificador " + patron);
+                }
 
-                log.info("Patron " + patron);
-                patron = patron;
-            }
-            for (int x = 0; x < pd.size(); x++) { // para todos los patrones
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     nLinea++;
 
                     Pattern p = Pattern.compile(patron);
                     Matcher m = p.matcher(linea);
-                    log.info("Patron reemplazado " + patron);
+                    log.info("Patron reemplazado Cierre " + patron);
                     if (m.find()) {
                         numLinea = nLinea;
                     }
@@ -268,7 +317,7 @@ public class Analisis {
 
     }
 
-    public boolean generarXML(Map mapa, ArrayList<String> nombreArchivo) {
+    public boolean generarXML(Map<String, Integer> mapa, List<Nodo> nombreArchivo) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -282,14 +331,9 @@ public class Analisis {
                 Text textFecha = document.createTextNode(new Date().toString());
 
 
-                /* Element usuarioElem = document.createElement("usuario");
-                Text text = document.createTextNode(usuario);*/
-
                 Element ubicacionElem = document.createElement("nombreArchivo");
-                Text textUb = document.createTextNode(nombreArchivo.get(x));
+                Text textUb = document.createTextNode(nombreArchivo.get(x).getPrograma());
 
-                /* Element cantDefElem = document.createElement("cantidadDefectos");
-                Text textCd = document.createTextNode(String.valueOf(cantidadDefectos));*/
 
                 Element cantDefBElem = document.createElement("cantidadDefectosBajo");
                 Text textCdb = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + bajo)));
@@ -300,20 +344,29 @@ public class Analisis {
                 Element cantDefCElem = document.createElement("cantidadDefectosCritico");
                 Text textCdc = document.createTextNode(String.valueOf(mapa.get(nombreArchivo.get(x) + critico)));
 
+                for (int j = 0; j < pd.size(); j++) {
+                    Element e = document.createElement(pd.get(j).getNombre());
+                    
+                    if (defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre())!= null) {
+
+                        Text t = document.createTextNode(defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()).toString());
+                        raiz.appendChild(e);
+                        e.appendChild(t);
+                    } else {
+                        continue;
+                    }
+                }
+
                 document.getDocumentElement().appendChild(raiz);
 
                 raiz.appendChild(fechaElem);
-                //   raiz.appendChild(usuarioElem);
                 raiz.appendChild(ubicacionElem);
-                //   raiz.appendChild(cantDefElem);
                 raiz.appendChild(cantDefBElem);
                 raiz.appendChild(cantDefMElem);
                 raiz.appendChild(cantDefCElem);
 
                 fechaElem.appendChild(textFecha);
-                //   usuarioElem.appendChild(text);
                 ubicacionElem.appendChild(textUb);
-                //   cantDefElem.appendChild(textCd);
                 cantDefBElem.appendChild(textCdb);
                 cantDefMElem.appendChild(textCdm);
                 cantDefCElem.appendChild(textCdc);
@@ -323,11 +376,9 @@ public class Analisis {
             document.setXmlVersion("1.0");
             Source source = new DOMSource(document);
             Result result = new StreamResult(new java.io.File("defectos.xml"));
-            Result console = new StreamResult(System.out);
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);
-            transformer.transform(source, console);
             return true;
         } catch (ParserConfigurationException e) {
             log.error(e.getMessage());
@@ -344,13 +395,15 @@ public class Analisis {
         }
     }
 
-    public ArrayList<PatronDefecto> obtenerPatrones() {
+    public List<PatronDefecto> obtenerPatrones() {
 
-        ArrayList<PatronDefecto> p = new ArrayList<PatronDefecto>();
+        List<PatronDefecto> p = new ArrayList<PatronDefecto>();
         try {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            log.info(new File("patrones.xml").getAbsolutePath());
+            log.info(new File("patrones.xml").getCanonicalPath());
             Document doc = docBuilder.parse(new File("patrones.xml"));
 
             doc.getDocumentElement().normalize();
@@ -363,14 +416,14 @@ public class Analisis {
                 if (patron.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element pa = (Element) patron;
-                    PatronDefecto pd = new PatronDefecto();
+                    PatronDefecto patronD = new PatronDefecto();
                     // -------
                     NodeList identificador = pa.getElementsByTagName("identificador");
                     Element identificadorElement = (Element) identificador.item(0);
 
                     NodeList identificadorList = identificadorElement.getChildNodes();
                     if (((Node) identificadorList.item(0)) != null) {
-                        pd.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
+                        patronD.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
                     }
 
                     // -------
@@ -379,7 +432,16 @@ public class Analisis {
 
                     NodeList nombreList = nombreElement.getChildNodes();
                     if (((Node) nombreList.item(0)) != null) {
-                        pd.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
+                        patronD.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
+
+                    }
+                    // -------
+                    NodeList expresion = pa.getElementsByTagName("expresion");
+                    Element expresionElement = (Element) expresion.item(0);
+
+                    NodeList expresionList = expresionElement.getChildNodes();
+                    if (((Node) expresionList.item(0)) != null) {
+                        patronD.setExpresion(((Node) expresionList.item(0)).getNodeValue().trim());
 
                     }
                     // ----
@@ -388,7 +450,7 @@ public class Analisis {
 
                     NodeList clasificacionList = clasificacionElement.getChildNodes();
                     if (((Node) clasificacionList.item(0)) != null) {
-                        pd.setClasificacion(((Node) clasificacionList.item(0)).getNodeValue().trim());
+                        patronD.setClasificacion(((Node) clasificacionList.item(0)).getNodeValue().trim());
                     }
 
                     // ----
@@ -397,10 +459,18 @@ public class Analisis {
 
                     NodeList descripcionList = descripcionElement.getChildNodes();
                     if (((Node) descripcionList.item(0)) != null) {
-                        pd.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
+                        patronD.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
+                    }
+                    // ----
+                    NodeList correccion = pa.getElementsByTagName("correccion");
+                    Element correccionElement = (Element) correccion.item(0);
+
+                    NodeList correccionList = correccionElement.getChildNodes();
+                    if (((Node) correccionList.item(0)) != null) {
+                        patronD.setCorreccion(((Node) correccionList.item(0)).getNodeValue().trim());
                     }
 
-                    p.add(pd);
+                    p.add(patronD);
 
                 }
 
