@@ -317,7 +317,7 @@ public class Analisis {
 
     }
 
-    public boolean generarXML(Map mapa, List<Nodo> nombreArchivo) {
+    public boolean generarXML(Map<String, Integer> mapa, List<Nodo> nombreArchivo) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -376,11 +376,9 @@ public class Analisis {
             document.setXmlVersion("1.0");
             Source source = new DOMSource(document);
             Result result = new StreamResult(new java.io.File("defectos.xml"));
-            Result console = new StreamResult(System.out);
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);
-            transformer.transform(source, console);
             return true;
         } catch (ParserConfigurationException e) {
             log.error(e.getMessage());
@@ -404,6 +402,8 @@ public class Analisis {
 
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            log.info(new File("patrones.xml").getAbsolutePath());
+            log.info(new File("patrones.xml").getCanonicalPath());
             Document doc = docBuilder.parse(new File("patrones.xml"));
 
             doc.getDocumentElement().normalize();
@@ -416,14 +416,14 @@ public class Analisis {
                 if (patron.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element pa = (Element) patron;
-                    PatronDefecto pd = new PatronDefecto();
+                    PatronDefecto patronD = new PatronDefecto();
                     // -------
                     NodeList identificador = pa.getElementsByTagName("identificador");
                     Element identificadorElement = (Element) identificador.item(0);
 
                     NodeList identificadorList = identificadorElement.getChildNodes();
                     if (((Node) identificadorList.item(0)) != null) {
-                        pd.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
+                        patronD.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
                     }
 
                     // -------
@@ -432,7 +432,7 @@ public class Analisis {
 
                     NodeList nombreList = nombreElement.getChildNodes();
                     if (((Node) nombreList.item(0)) != null) {
-                        pd.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
+                        patronD.setNombre(((Node) nombreList.item(0)).getNodeValue().trim());
 
                     }
                     // -------
@@ -441,7 +441,7 @@ public class Analisis {
 
                     NodeList expresionList = expresionElement.getChildNodes();
                     if (((Node) expresionList.item(0)) != null) {
-                        pd.setExpresion(((Node) expresionList.item(0)).getNodeValue().trim());
+                        patronD.setExpresion(((Node) expresionList.item(0)).getNodeValue().trim());
 
                     }
                     // ----
@@ -450,7 +450,7 @@ public class Analisis {
 
                     NodeList clasificacionList = clasificacionElement.getChildNodes();
                     if (((Node) clasificacionList.item(0)) != null) {
-                        pd.setClasificacion(((Node) clasificacionList.item(0)).getNodeValue().trim());
+                        patronD.setClasificacion(((Node) clasificacionList.item(0)).getNodeValue().trim());
                     }
 
                     // ----
@@ -459,18 +459,18 @@ public class Analisis {
 
                     NodeList descripcionList = descripcionElement.getChildNodes();
                     if (((Node) descripcionList.item(0)) != null) {
-                        pd.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
+                        patronD.setDescripcion(((Node) descripcionList.item(0)).getNodeValue().trim());
                     }
                     // ----
                     NodeList correccion = pa.getElementsByTagName("correccion");
-                    Element correccionElement = (Element) descripcion.item(0);
+                    Element correccionElement = (Element) correccion.item(0);
 
                     NodeList correccionList = correccionElement.getChildNodes();
                     if (((Node) correccionList.item(0)) != null) {
-                        pd.setCorreccion(((Node) correccionList.item(0)).getNodeValue().trim());
+                        patronD.setCorreccion(((Node) correccionList.item(0)).getNodeValue().trim());
                     }
 
-                    p.add(pd);
+                    p.add(patronD);
 
                 }
 
