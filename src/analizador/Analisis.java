@@ -79,7 +79,7 @@ public class Analisis {
             mapa.put(archivosFiltrados.get(x) + bajo, tmp.get(bajo));
 
         }
-        
+
         generarXML(mapa, archivosFiltrados);
 
     }
@@ -105,7 +105,7 @@ public class Analisis {
         try {
 
             archivo = new File(nodo.getPrograma());
-        
+
             log.info("Cantidad de patrones " + pd.size());
             for (int x = 0; x < pd.size(); x++) {// para todos los patrones
                 List<Integer> lineas = new ArrayList<Integer>();
@@ -204,6 +204,7 @@ public class Analisis {
                             //log.info("Linea inicio " + numLineaInicio);
                             //log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
+                                log.info("Defecto encontrado linea inicio" + numLineaInicio + "Final" + numLineaFinal);
                                 if (pd.get(x).getClasificacion().equals(critico)) {
                                     cantidadCritico++;
                                 } else if (pd.get(x).getClasificacion().equals(medio)) {
@@ -269,7 +270,7 @@ public class Analisis {
         FileReader fr = null;
         BufferedReader br = null;
         int numLinea = -1;
-
+        boolean comentario =false;
         String linea;
         int nLinea = 0;
 
@@ -291,11 +292,27 @@ public class Analisis {
                 while ((linea = br.readLine()) != null) { // para cada linea del archivo
 
                     nLinea++;
+                    if (linea.contains("--")) { // valida de que la  linea a analizar no sea comentario de solo 1 linea
+                        continue;
+                    }
+                    if (linea.contains("/*") && linea.contains("*/")) {
+                        continue;
+                    }
+                    if (linea.contains("/*")) {  /* validacion comentarios multiples*/
+                        comentario = true;
+                    }
+                    if (linea.contains("*/")) {
+                        comentario = false;
+                    }
+                    if (comentario) {
+                        continue;
+                    }
 
                     Pattern p = Pattern.compile(patron);
                     Matcher m = p.matcher(linea);
                     log.info("Patron reemplazado Cierre " + patron);
                     if (m.find()) {
+                        log.info("Patron Cierre encontrado" + nLinea);
                         numLinea = nLinea;
                     }
                 }
@@ -346,8 +363,8 @@ public class Analisis {
 
                 for (int j = 0; j < pd.size(); j++) {
                     Element e = document.createElement(pd.get(j).getNombre());
-                    
-                    if (defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre())!= null) {
+
+                    if (defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()) != null) {
 
                         Text t = document.createTextNode(defectos.get(nombreArchivo.get(x).getPrograma() + pd.get(j).getNombre()).toString());
                         raiz.appendChild(e);
