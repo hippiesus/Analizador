@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,13 +47,14 @@ public class Analisis {
     final String delimitador = "::";
     final String identificadorOracle = "([A-Za-z0-9._\\$#]+)"; // doble \\ por ser caracter especial para java
     final String identificadorAlter = "([A-Za-z0-9._\\$#]+)";
-    final String espacioBlanco = "\\\\s*";
+    final String espacioBlanco = "\\\\s+";
     final String parentesisApertura = "\\\\(";
     final String parentesisCierre = "\\\\)";
     final String critico = "critico";
     final String medio = "medio";
     final String bajo = "bajo";
     final String operador = "[\\*\\+\\-\\/]";
+    String palabrasReservadas[] = {};
     Map<String, List<Integer>> defectos;
     List<PatronDefecto> pd;
 
@@ -196,6 +196,7 @@ public class Analisis {
                             if (m.find() && group) {
                                 String ident = null;
                                 ident = m.group(1);
+                                log.info("Identificador :"+ident);
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
                             } else if (m.find()) {
