@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -205,11 +206,11 @@ public class Analisis {
                             //log.info("Linea final " + numLineaFinal);
                             if (numLineaInicio > numLineaFinal) {
                                 log.info("Defecto encontrado linea inicio" + numLineaInicio + "Final" + numLineaFinal);
-                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                if (pd.get(x).getClasificacion().toLowerCase().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                } else if (pd.get(x).getClasificacion().toLowerCase().equals(medio)) {
                                     cantidadMedio++;
-                                } else {
+                                } else if(pd.get(x).getClasificacion().toLowerCase().equals(bajo)) {
                                     cantidadBajo++;
                                 }
                                 lineas.add(numLinea);
@@ -224,11 +225,11 @@ public class Analisis {
                             Matcher m = p.matcher(linea);
                             log.info("Patron reemplazado " + patron);
                             if (m.find()) {
-                                if (pd.get(x).getClasificacion().equals(critico)) {
+                                if (pd.get(x).getClasificacion().toLowerCase().equals(critico)) {
                                     cantidadCritico++;
-                                } else if (pd.get(x).getClasificacion().equals(medio)) {
+                                } else if (pd.get(x).getClasificacion().toLowerCase().equals(medio)) {
                                     cantidadMedio++;
-                                } else {
+                                } else if (pd.get(x).getClasificacion().toLowerCase().equals(bajo)){
                                     cantidadBajo++;
                                 }
                                 lineas.add(numLinea);
