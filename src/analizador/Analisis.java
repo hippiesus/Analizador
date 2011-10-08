@@ -54,7 +54,49 @@ public class Analisis {
     final String medio = "medio";
     final String bajo = "bajo";
     final String operador = "[\\*\\+\\-\\/]";
-    String palabrasReservadas[] = {};
+    String palabrasReservadas[] = {	"ALL", "ALTER", "AND", "ANY", "ARRAY", "ARROW", "AS", "ASC", "AT",
+	"BEGIN", "BETWEEN", "BY",
+	"CASE", "CHECK", "CLUSTERS", "CLUSTER", "COLAUTH", "COLUMNS", "COMPRESS", "CONNECT", "CRASH", "CREATE", "CURRENT",
+	"DECIMAL", "DECLARE", "DEFAULT", "DELETE", "DESC", "DISTINCT", "DROP",
+	"ELSE", "END", "EXCEPTION", "EXCLUSIVE", "EXISTS",
+	"FETCH", "FORM", "FOR", "FROM",
+	"GOTO", "GRANT", "GROUP",
+	"HAVING",
+	"IDENTIFIED", "IF", "IN", "INDEXES", "INDEX", "INSERT", "INTERSECT", "INTO","IS",
+	"LIKE", "LOCK",
+	"MINUS", "MODE",
+	"NOCOMPRESS", "NOT", "NOWAIT", "NULL",
+	"OF", "ON", "OPTION", "OR", "ORDER","OVERLAPS",
+	"PRIOR", "PROCEDURE", "PUBLIC",
+	"RANGE", "RECORD", "RESOURCE", "REVOKE",
+	"SELECT", "SHARE", "SIZE", "SQL", "START", "SUBTYPE",
+	"TABAUTH", "TABLE", "THEN", "TO", "TYPE",
+	"UNION", "UNIQUE", "UPDATE", "USE",
+	"VALUES", "VIEW", "VIEWS",
+	"WHEN", "WHERE", "WITH",
+	"A", "ADD", "AGENT", "AGGREGATE", "ARRAY", "ATTRIBUTE", "AUTHID2", "AVG",
+	"BFILE_BASE", "BINARY", "BLOB_BASE", "BLOCK", "BODY", "BOTH", "BOUND", "BULK", "BYTE",
+	"C", "CALL", "CALLING", "CASCADE", "CHAR", "CHAR_BASE", "CHARACTER", "CHARSETFORM", "CHARSETID", "CHARSET", "CLOB_BASE", "CLOSE", "COLLECT", "COMMENT", "COMMIT", "COMMITTED", "COMPILED", "CONSTANT", "CONSTRUCTOR", "CONTEXT", "CONVERT", "COUNT", "CURSOR", "CUSTOMDATUM",
+	"DANGLING", "DATA", "DATE", "DATE_BASE", "DAY", "DEFINE", "DETERMINISTIC", "DOUBLE", "DURATION",
+	"ELEMENT", "ELSIF", "EMPTY", "ESCAPE", "EXCEPT", "EXCEPTIONS", "EXECUTE", "EXIT", "EXTERNAL",
+	"FINAL", "FIXED", "FLOAT", "FORALL", "FORCE", "FUNCTION",
+	"GENERAL",
+	"HASH", "HEAP", "HIDDEN", "HOUR",
+	"IMMEDIATE", "INCLUDING", "INDICATOR", "INDICES", "INFINITE", "INSTANTIABLE", "INT", "INTERFACE", "INTERVAL", "INVALIDATE", "ISOLATION",
+	"JAVA",
+	"LANGUAGE", "LARGE", "LEADING", "LENGTH", "LEVEL", "LIBRARY", "LIKE2", "LIKE4", "LIKEC", "LIMIT", "LIMITED", "LOCAL", "LONG", "LOOP",
+	"MAP", "MAX", "MAXLEN", "MEMBER", "MERGE", "MIN", "MINUTE", "MOD", "MODIFY", "MONTH", "MULTISET",
+	"NAME", "NAN", "NATIONAL", "NATIVE", "NCHAR", "NEW", "NOCOPY", "NUMBER_BASE",
+	"OBJECT", "OCICOLL", "OCIDATETIME", "OCIDATE", "OCIDURATION", "OCIINTERVAL", "OCILOBLOCATOR", "OCINUMBER", "OCIRAW", "OCIREFCURSOR", "OCIREF", "OCIROWID", "OCISTRING", "OCITYPE", "ONLY", "OPAQUE", "OPEN", "OPERATOR", "ORACLE", "ORADATA", "ORGANIZATION", "ORLANY", "ORLVARY", "OTHERS", "OUT", "OVERRIDING",
+	"PACKAGE", "PARALLEL_ENABLE", "PARAMETER", "PARAMETERS", "PARTITION", "PASCAL", "PIPE", "PIPELINED", "PRAGMA", "PRECISION", "PRIVATE",
+	"RAISE", "RANGE", "RAW", "READ", "RECORD", "REF", "REFERENCE", "REM", "REMAINDER", "RENAME", "RESULT", "RETURN", "RETURNING", "REVERSE", "ROLLBACK", "ROW",
+	"SAMPLE", "SAVE", "SAVEPOINT", "SB1", "SB2", "SB4", "SECOND", "SEGMENT", "SELF", "SEPARATE", "SEQUENCE", "SERIALIZABLE", "SET", "SHORT", "SIZE_T", "SOME", "SPARSE", "SQLCODE", "SQLDATA", "SQLNAME", "SQLSTATE", "STANDARD", "STATIC", "STDDEV", "STORED", "STRING", "STRUCT", "STYLE", "SUBMULTISET", "SUBPARTITION", "SUBSTITUTABLE", "SUBTYPE", "SUM", "SYNONYM",
+	"TDO", "THE", "TIME", "TIMESTAMP", "TIMEZONE_ABBR", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TIMEZONE_REGION", "TRAILING", "TRANSAC", "TRANSACTIONAL", "TRUSTED", "TYPE",
+	"UB1", "UB2", "UB4", "UNDER", "UNSIGNED", "UNTRUSTED", "USE", "USING",
+	"VALIST", "VALUE", "VARIABLE", "VARIANCE", "VARRAY", "VARYING", "VOID",
+	"WHILE", "WORK", "WRAPPED", "WRITE",
+	"YEAR",
+	"ZONE"};
     Map<String, List<Integer>> defectos;
     List<PatronDefecto> pd;
 
@@ -195,7 +237,17 @@ public class Analisis {
                             Matcher m = p.matcher(linea);
                             if (m.find() && group) {
                                 String ident = null;
+                                boolean esPalabraReservada=false;
                                 ident = m.group(1);
+                                //comprueba que el identificador no sea una palabra reservada
+                                for(int i=0; i<palabrasReservadas.length;i++){
+                                    if(ident.toLowerCase().equals(palabrasReservadas[i].toLowerCase())){
+                                        esPalabraReservada=true;
+                                    }                                
+                                }
+                                if(esPalabraReservada){
+                                    continue;
+                                }
                                 log.info("Identificador :"+ident);
                                 numLineaInicio = numLinea;
                                 numLineaFinal = analizarCierre(ident, cierre, nodo.getPrograma());
