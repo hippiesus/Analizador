@@ -1,29 +1,38 @@
 <patrones>
 	<patron>
-		<identificador>2</identificador>
-		<nombre>pls_integer</nombre>
-		<expresion>identificador number:: identificador := identificadorAlter operador identificadorAlter</expresion>
-		<clasificacion>bajo</clasificacion>
-		<descripcion>open</descripcion>
-		<correccion>open</correccion>
+		<nombre>cierre_cursor</nombre>
+		<expresion>open identificador;::close identificador;</expresion>
+		<clasificacion>medio</clasificacion>
+		<descripcion>Los Cursores se deben abrir  con la siguiente sintaxis: “OPEN identificadorCursor;”, cuando se termine de utilizar se debe realizar el cierre con siguiente sintaxis: “Close identificadorCursor;”.</descripcion>
+		<correccion>debe realizar un cierre el cursor con la instruccion close identificador;</correccion>
 	</patron>
 	
-	<patron>
-		<identificador>1</identificador>
-		<nombre>cierre_cursor</nombre>
-		<expresion>open identificador::close identificador</expresion>
-		<clasificacion>critico</clasificacion>
-		<descripcion>open</descripcion>
-		<correccion>open</correccion>
-	</patron>
-
-	<patron>
-		<identificador>4</identificador>
-		<nombre>cierre_if</nombre>
-		<expresion>if (identificador) then::end if</expresion>
-		<clasificacion>medio</clasificacion>
-		<descripcion>open</descripcion>
-		<correccion>open</correccion>
-	</patron>
-
+   <patron>
+    	<nombre>pls_integer</nombre>
+    	<expresion>identificador number::(identificador := identificadorAlter operador identificadorAlter)|(update identificador) </expresion>
+    	<clasificacion>bajo</clasificacion>
+     	<descripcion>open</descripcion>
+    	<correccion>open</correccion>
+   </patron>
+   <!--patron>
+    	<nombre>binary_integer</nombre>
+    	<expresion>identificador number:: identificador := identificadorAlter operador identificadorAlter</expresion>
+    	<clasificacion>bajo</clasificacion>
+     	<descripcion>open</descripcion>
+    	<correccion>open</correccion>
+   </patron-->
+    <patron>
+    	<nombre>binary_float</nombre>
+    	<expresion>identificador float:: identificador := identificadorAlter operador identificadorAlter</expresion>
+    	<clasificacion>bajo</clasificacion>
+     	<descripcion>open</descripcion>
+    	<correccion>open</correccion>
+   </patron>
+         <patron>
+    	<nombre>binary_double</nombre>
+    	<expresion>identificador double precision:: identificador := identificadorAlter operador identificadorAlter</expresion>
+    	<clasificacion>bajo</clasificacion>
+     	<descripcion>open</descripcion>
+    	<correccion>open</correccion>
+   </patron>
 </patrones>

@@ -222,6 +222,7 @@ public class Analisis {
                         if (comentario) {
                             continue;
                         }
+                        //si encuentra en la linea a una llamada se ira a ese archivo
                         for (int p = 0; p < nodo.getLlamadas().size(); p++) {
                             String llamada = nodo.getLlamadas().get(p).getPrograma().substring(nodo.getLlamadas().get(p).getPrograma().lastIndexOf("/") + 1, nodo.getLlamadas().get(p).getPrograma().length() - 4);
                             if (linea.contains(llamada)) {
@@ -489,13 +490,7 @@ public class Analisis {
                     Element pa = (Element) patron;
                     PatronDefecto patronD = new PatronDefecto();
                     // -------
-                    NodeList identificador = pa.getElementsByTagName("identificador");
-                    Element identificadorElement = (Element) identificador.item(0);
-
-                    NodeList identificadorList = identificadorElement.getChildNodes();
-                    if (((Node) identificadorList.item(0)) != null) {
-                        patronD.setIdentificador(Integer.parseInt(((Node) identificadorList.item(0)).getNodeValue().trim()));
-                    }
+                    patronD.setIdentificador(s);
 
                     // -------
                     NodeList nombre = pa.getElementsByTagName("nombre");
