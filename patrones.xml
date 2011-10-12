@@ -9,30 +9,30 @@
 	
    <patron>
     	<nombre>pls_integer</nombre>
-    	<expresion>identificador number::(identificador := identificadorAlter operador identificadorAlter)|(update identificador) </expresion>
+    	<expresion>identificador number::identificador := identificadorAlter operador identificadorAlter</expresion>
     	<clasificacion>bajo</clasificacion>
-     	<descripcion>open</descripcion>
-    	<correccion>open</correccion>
+     	<descripcion>Sintaxis identificador NUMBER;  por identificador PLS_INTEGER;</descripcion>
+    	<correccion>Utilizar tipo de dato Pls_integer en vez de NUMBER</correccion>
    </patron>
    <!--patron>
     	<nombre>binary_integer</nombre>
     	<expresion>identificador number:: identificador := identificadorAlter operador identificadorAlter</expresion>
     	<clasificacion>bajo</clasificacion>
-     	<descripcion>open</descripcion>
-    	<correccion>open</correccion>
+     	<descripcion>Sintaxis identificador NUMBER;  por identificador BINARY_INTEGER;</descripcion>
+    	<correccion>Utilizar tipo de dato binary_integer en vez de NUMBER</correccion>
    </patron-->
     <patron>
     	<nombre>binary_float</nombre>
     	<expresion>identificador float:: identificador := identificadorAlter operador identificadorAlter</expresion>
     	<clasificacion>bajo</clasificacion>
-     	<descripcion>open</descripcion>
-    	<correccion>open</correccion>
+     	<descripcion>Sintaxis identificador FLOAT;  por identificador BINARY_FLOAT;</descripcion>
+    	<correccion>Utilizar tipo de dato binary_float en vez de float</correccion>
    </patron>
-         <patron>
+        <patron>
     	<nombre>binary_double</nombre>
     	<expresion>identificador double precision:: identificador := identificadorAlter operador identificadorAlter</expresion>
     	<clasificacion>bajo</clasificacion>
      	<descripcion>open</descripcion>
-    	<correccion>open</correccion>
+    	<correccion>Utilizar tipo de dato binary_double en vez de double precision</correccion>
    </patron>
 </patrones>

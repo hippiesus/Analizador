@@ -48,7 +48,6 @@ public class AnalisisTest {
     public void testDetectarDefectos() {
         System.out.println("detectarDefectos");
         String ubicacionArchivos = "/Users/juancarlos/tmp/";
-        boolean exp;
         Analisis instance = new Analisis();
         instance.detectarDefectos(ubicacionArchivos);
     }
@@ -60,14 +59,14 @@ public class AnalisisTest {
     public void testAnalizarNodo() {
         System.out.println("analizarNodo");
         Nodo nodo = new Nodo();
-        nodo.setPrograma("/Users/juancarlos/tmp/findcourse.sql");
+        nodo.setPrograma("/Users/juancarlos/tmp/funcion1.sql");
         Analisis instance = new Analisis();
         Map<String,Integer> mapa=instance.analizarNodo(nodo);
         assertEquals(3, mapa.size());
         int critico=mapa.get("critico");
         int medio=mapa.get("medio");
         int bajo=mapa.get("bajo");
-        assertEquals(1,critico);
+        assertEquals(0,critico);
         assertEquals(1,medio);
         assertEquals(0,bajo);
         
@@ -77,12 +76,12 @@ public class AnalisisTest {
     @Test
     public void testAnalizarCierre() {
         System.out.println("analizarCierre");
-        String patron="close (identificador)";
+        String patron="close identificador;";
         String ident="c1";               
-        String programa="/Users/juancarlos/tmp/findcourse.sql";
+        String programa="/Users/juancarlos/tmp/funcion1.sql";
         Analisis instance = new Analisis();
         int res=instance.analizarCierre(ident, patron,programa);
-        assertEquals(16,res);
+        assertEquals(-1,res);
         
     }
 
@@ -106,7 +105,7 @@ public class AnalisisTest {
         System.out.println("obtenerPatrones");
         Analisis instance = new Analisis();
         List result = instance.obtenerPatrones();
-        assertEquals(3, result.size());
+        assertEquals(4, result.size());
     }
     
 }
